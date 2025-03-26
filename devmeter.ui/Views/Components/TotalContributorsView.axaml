@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="devmeter.ui.Views.Components.TotalContributorsView"
+			 Background="Transparent">
+
+	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+		<Grid RowDefinitions="Auto, Auto, Auto" Width="270" Margin="15 15 15 15" HorizontalAlignment="Left">
+			<TextBlock Grid.Row="0" Classes="h4">Contributors</TextBlock>
+			<TextBlock Grid.Row="1" Classes="h1">40</TextBlock>
+			<TextBlock Grid.Row="2" Classes="h4">+0 in the last 30 days</TextBlock>
+		</Grid>
+	</Border>
+
+</UserControl>
