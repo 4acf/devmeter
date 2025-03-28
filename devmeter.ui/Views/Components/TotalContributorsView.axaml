@@ -7,7 +7,7 @@
 			 Background="Transparent">
 
 	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-		<Grid RowDefinitions="Auto, Auto, Auto" Width="270" Margin="15 15 15 15" HorizontalAlignment="Left">
+		<Grid RowDefinitions="Auto, Auto, Auto" Width="270" Margin="15" HorizontalAlignment="Left">
 			<TextBlock Grid.Row="0" Classes="h4">Contributors</TextBlock>
 			<TextBlock Grid.Row="1" Classes="h1">40</TextBlock>
 			<TextBlock Grid.Row="2" Classes="h4">+0 in the last 30 days</TextBlock>

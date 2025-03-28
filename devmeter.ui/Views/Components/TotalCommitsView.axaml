@@ -7,7 +7,7 @@
 			 Background="Transparent">
 
 	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-		<Grid RowDefinitions="Auto, Auto, Auto" Width="270" Margin="15 15 15 15" HorizontalAlignment="Left">
+		<Grid RowDefinitions="Auto, Auto, Auto" Width="270" Margin="15" HorizontalAlignment="Left">
 			<TextBlock Grid.Row="0" Classes="h4">Total Commits</TextBlock>
 			<TextBlock Grid.Row="1" Classes="h1">2,045</TextBlock>
 			<TextBlock Grid.Row="2" Classes="h4">+105 in the last 30 days</TextBlock>

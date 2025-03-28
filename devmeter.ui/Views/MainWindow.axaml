@@ -34,11 +34,11 @@
 		</ExperimentalAcrylicBorder>
 
 		<Grid RowDefinitions="Auto, *" Margin="66">
-			<Grid Grid.Row="0" ColumnDefinitions="Auto, *" Margin="0 0 0 10">
+			<Grid Grid.Row="0" ColumnDefinitions="Auto, *" Margin="0 0 0 15">
 				<TextBlock Grid.Column="0" Classes="h1" Text="Project Name"></TextBlock>
-				<TextBox Grid.Column="1" Classes="search" HorizontalAlignment="Right" Text="" Watermark="Search...">
+				<TextBox Grid.Column="1" Classes="search" HorizontalAlignment="Right" Text="{Binding SearchString}" Watermark="Search...">
 					<TextBox.InnerRightContent>
-						<Button Classes="search">
+						<Button Classes="search" Command="{Binding SearchCommand}">
 							<materialIcons:MaterialIcon 
 								Foreground="#656668"
 								Kind="Search"
@@ -46,15 +46,21 @@
 						</Button>
 					</TextBox.InnerRightContent>
 					<TextBox.KeyBindings>
-						<KeyBinding Gesture="Enter"/>
+						<KeyBinding Command="{Binding SearchCommand}" Gesture="Enter"/>
 					</TextBox.KeyBindings>
 				</TextBox>
 			</Grid>
 			<Grid Grid.Row="1" RowDefinitions="Auto, *, *">
 				<Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto">
-					<components:TotalLinesView Grid.Column="0"></components:TotalLinesView>
-					<components:TotalCommitsView Grid.Column="1"></components:TotalCommitsView>
-					<components:TotalContributorsView Grid.Column="2"></components:TotalContributorsView>
+					<Border Grid.Column="0" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
+						<components:TotalLinesView ></components:TotalLinesView>
+					</Border>
+					<Border Grid.Column="1" MaxWidth="300" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
+						<components:TotalCommitsView ></components:TotalCommitsView>
+					</Border>
+					<Border Grid.Column="2" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
+						<components:TotalContributorsView ></components:TotalContributorsView>
+					</Border>
 				</Grid>
 				
 				<TextBlock Grid.Row="1" Text="ROW ONE"></TextBlock>
