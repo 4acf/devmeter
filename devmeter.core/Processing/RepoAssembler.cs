@@ -24,5 +24,11 @@ namespace devmeter.core.Processing
         {
             _repo.Name = info.Name;
         }
+
+        public void UpdateCommits(string commits)
+        {
+            _repo.Commits = commits;
+        }
+
     }
 }

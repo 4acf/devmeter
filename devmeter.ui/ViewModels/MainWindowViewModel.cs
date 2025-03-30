@@ -5,8 +5,10 @@ using devmeter.core.Github.Models;
 using devmeter.core.Processing;
 using devmeter.ui.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
@@ -27,10 +29,13 @@ namespace devmeter.ui.ViewModels
 
         private readonly GitHubClient _gitHubClient;
 
+        public TotalCommitsViewModel TotalCommitsViewModel { get; }
+
         public MainWindowViewModel()
         {
             RepoName = "-";
             _gitHubClient = new GitHubClient();
+            TotalCommitsViewModel = new TotalCommitsViewModel();
         }
 
         [RelayCommand]
@@ -48,6 +53,7 @@ namespace devmeter.ui.ViewModels
 
             var repoAssembler = new RepoAssembler(new Repo());
 
+            //general info
             var generalInfoResponse = await _gitHubClient.GetRepositoryInformation(parseResult);
             if (generalInfoResponse.Succeeded && generalInfoResponse.SerializedData != null)
             {
@@ -68,9 +74,27 @@ namespace devmeter.ui.ViewModels
                 return;
             }
 
+            //commits
+            var commitsResponse = await _gitHubClient.GetCommits(parseResult);
+            if (commitsResponse.Succeeded && commitsResponse.HtmlData != null)
+            {
+                var numCommitsString = HtmlParser.ExtractCommitsFromHtml(commitsResponse.HtmlData);
+                if (numCommitsString != null)
+                {
+                    repoAssembler.UpdateCommits(numCommitsString);
+                }
+            }
+            else
+            {
+                var errorMessage = commitsResponse.ErrorMessage ?? commitsResponse.StatusCode.ToString();
+                ErrorMessage = errorMessage ?? "Unexpected error";
+                return;
+            }
+
             var repo = repoAssembler.GetRepo();
             RepoName = repo.Name;
             ErrorMessage = string.Empty;
+            TotalCommitsViewModel.TotalCommits = repo.Commits;
 
         }
 

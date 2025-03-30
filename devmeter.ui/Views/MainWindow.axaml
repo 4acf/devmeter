@@ -57,7 +57,7 @@
 						<components:TotalLinesView ></components:TotalLinesView>
 					</Border>
 					<Border Grid.Column="1" MaxWidth="300" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
-						<components:TotalCommitsView ></components:TotalCommitsView>
+						<components:TotalCommitsView DataContext="{Binding TotalCommitsViewModel}"></components:TotalCommitsView>
 					</Border>
 					<Border Grid.Column="2" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
 						<components:TotalContributorsView ></components:TotalContributorsView>

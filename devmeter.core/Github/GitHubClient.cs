@@ -11,7 +11,8 @@ namespace devmeter.core.Github
     public class GitHubClient
     {
 
-        private static readonly Uri _baseUrl = new("https://api.github.com", UriKind.Absolute);
+        private static readonly Uri _baseApiUrl = new("https://api.github.com", UriKind.Absolute);
+        private static readonly Uri _baseGitHubUrl = new("https://github.com", UriKind.Absolute);
         private readonly HttpClient _httpClient;
 
         public GitHubClient()
@@ -25,7 +26,7 @@ namespace devmeter.core.Github
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}repos{absolutePath}");
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}");
                 var json = await response.Content.ReadAsStringAsync();
                 return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
             }
@@ -35,19 +36,28 @@ namespace devmeter.core.Github
             }
         }
 
-        public async Task<string> GetCommits(string absolutePath)
+        public async Task<GitHubHtmlResponse> GetCommits(string absolutePath)
         {
-            return await _httpClient.GetStringAsync($"{_baseUrl}repos{absolutePath}/commits");
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseGitHubUrl}{absolutePath}");
+                var html = await response.Content.ReadAsStringAsync();
+                return new GitHubHtmlResponse(response.IsSuccessStatusCode, response.StatusCode, null, html);
+            }
+            catch (HttpRequestException e)
+            {
+                return new GitHubHtmlResponse(false, e.StatusCode, e.Message, null);
+            } 
         }
 
         public async Task<string> GetContributors(string absolutePath)
         {
-            return await _httpClient.GetStringAsync($"{_baseUrl}repos{absolutePath}/contributors");
+            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{absolutePath}/contributors");
         }
 
         public async Task<string> GetFileTreeRoot(string absolutePath)
         {
-            return await _httpClient.GetStringAsync($"{_baseUrl}repos{absolutePath}/contents/");
+            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{absolutePath}/contents/");
         }
 
     }

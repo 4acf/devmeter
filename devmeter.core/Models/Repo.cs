@@ -9,7 +9,7 @@ namespace devmeter.ui.Core.Models
     public class Repo
     {
         public string Name { get; set; } = string.Empty;
-        public int Commits { get; set; }
+        public string Commits { get; set; } = string.Empty;
         public int Contributors { get; set; }
         public List<Contributor> TopContributors { get; set; } = [];
         public List<IFilesystemObject> FilesystemObjects { get; set; } = [];
