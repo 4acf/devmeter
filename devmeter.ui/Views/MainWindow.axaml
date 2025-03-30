@@ -33,9 +33,9 @@
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
-		<Grid RowDefinitions="Auto, *" Margin="66">
-			<Grid Grid.Row="0" ColumnDefinitions="Auto, *" Margin="0 0 0 15">
-				<TextBlock Grid.Column="0" Classes="h1" Text="Project Name"></TextBlock>
+		<Grid RowDefinitions="Auto, Auto, *" Margin="66">
+			<Grid Grid.Row="0" ColumnDefinitions="Auto, *">
+				<TextBlock Grid.Column="0" Classes="h1" Text="{Binding RepoName}"></TextBlock>
 				<TextBox Grid.Column="1" Classes="search" HorizontalAlignment="Right" Text="{Binding SearchString}" Watermark="Search...">
 					<TextBox.InnerRightContent>
 						<Button Classes="search" Command="{Binding SearchCommand}">
@@ -50,7 +50,8 @@
 					</TextBox.KeyBindings>
 				</TextBox>
 			</Grid>
-			<Grid Grid.Row="1" RowDefinitions="Auto, *, *">
+			<TextBlock Grid.Row="1" Classes="error" Text="{Binding ErrorMessage}" HorizontalAlignment="Right" Margin="0 -5 0 10"></TextBlock>
+			<Grid Grid.Row="2" RowDefinitions="Auto, *, *">
 				<Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto">
 					<Border Grid.Column="0" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
 						<components:TotalLinesView ></components:TotalLinesView>

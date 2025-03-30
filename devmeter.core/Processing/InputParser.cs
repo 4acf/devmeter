@@ -14,32 +14,30 @@ namespace devmeter.core.Processing
         [GeneratedRegex("^/[^/]+/[^/]+$", RegexOptions.IgnoreCase)]
         private static partial Regex _repoSearchRegex();
 
-        public static bool TryParse(string? input, out string? output)
+        public static bool TryParse(string? input, out string output)
         {
-
-            output = null;
 
             if (string.IsNullOrEmpty(input))
             {
-                Debug.WriteLine("Input error: No input provided");
+                output = "Please provide an input";
                 return false;
             }
 
             if (Uri.TryCreate(input, UriKind.Absolute, out var searchUri) == false)
             {
-                Debug.WriteLine("Input error: Invalid URI");
+                output = "Invalid URI";
                 return false;
             }
 
             if (searchUri.Host != "github.com" && searchUri.Host != "www.github.com")
             {
-                Debug.WriteLine("Input error: Invalid host");
+                output = "Invalid host";
                 return false;
             }
 
             if (!_repoSearchRegex().IsMatch(searchUri.AbsolutePath))
             {
-                Debug.WriteLine("Input error: Absolute path of search URI does not match the format '/OWNER/REPO'");
+                output = "Path of search URI must match the format '/OWNER/REPO'";
                 return false;
             }
 

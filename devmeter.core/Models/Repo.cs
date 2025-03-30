@@ -12,5 +12,6 @@ namespace devmeter.ui.Core.Models
         public int Commits { get; set; }
         public int Contributors { get; set; }
         public List<Contributor> TopContributors { get; set; } = [];
+        public List<IFilesystemObject> FilesystemObjects { get; set; } = [];
     }
 }
