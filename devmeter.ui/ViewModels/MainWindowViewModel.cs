@@ -35,7 +35,7 @@ namespace devmeter.ui.ViewModels
         public MainWindowViewModel()
         {
             RepoName = "-";
-            _gitHubClient = new GitHubClient();
+            _gitHubClient = new GitHubClient(100);
             TotalCommitsViewModel = new TotalCommitsViewModel();
             TotalContributorsViewModel = new TotalContributorsViewModel();
         }
@@ -76,7 +76,7 @@ namespace devmeter.ui.ViewModels
                 return;
             }
 
-            //commits + contributions
+            //total commits + contributions
             var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(parseResult);
             if (mainPageHtmlResponse.Succeeded && mainPageHtmlResponse.HtmlData != null)
             {
@@ -102,12 +102,43 @@ namespace devmeter.ui.ViewModels
                 return;
             }
 
-            //contributors
+            //commits in last 30 days
+            int page = 1;
+            int recentCommits = 0;
+            while (true)
+            {
+                var recentCommitsResponse = await _gitHubClient.GetCommits(parseResult, page, 30);
+                if (recentCommitsResponse.Succeeded && recentCommitsResponse.SerializedData != null)
+                {
+                    var deserializedRecentCommits = JsonSerializer.Deserialize<List<GitHubCommit>>(recentCommitsResponse.SerializedData);
+                    if (deserializedRecentCommits != null)
+                    {
+                        recentCommits += deserializedRecentCommits.Count;
+                        if (deserializedRecentCommits.Count < _gitHubClient.PerPage)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    var errorMessage = recentCommitsResponse.ErrorMessage;
+                    if (errorMessage == null && recentCommitsResponse.SerializedData != null)
+                    {
+                        errorMessage = JsonSerializer.Deserialize<GitHubApiError>(recentCommitsResponse.SerializedData)?.Message;
+                    }
+                    ErrorMessage = errorMessage ?? "Unexpected error";
+                    return;
+                }
+            }
+            repoAssembler.UpdateCommitsInLast30Days(recentCommits)
 
+            //update ui
             var repo = repoAssembler.GetRepo();
             RepoName = repo.Name;
             ErrorMessage = string.Empty;
             TotalCommitsViewModel.TotalCommits = repo.Commits;
+            TotalCommitsViewModel.CommitsInLast30Days = $"+{repo.CommitsInLast30Days} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = repo.Contributors;
 
         }

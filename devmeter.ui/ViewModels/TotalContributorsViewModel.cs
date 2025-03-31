@@ -13,9 +13,13 @@ namespace devmeter.ui.ViewModels
         [ObservableProperty]
         private string _totalContributors;
 
+        [ObservableProperty]
+        private string _bottomRowContent;
+
         public TotalContributorsViewModel()
         {
             _totalContributors = "-";
+            _bottomRowContent = string.Empty;
         }
 
     }

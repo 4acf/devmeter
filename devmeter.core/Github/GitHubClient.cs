@@ -11,12 +11,14 @@ namespace devmeter.core.Github
     public class GitHubClient
     {
 
+        public readonly int PerPage;
         private static readonly Uri _baseApiUrl = new("https://api.github.com", UriKind.Absolute);
         private static readonly Uri _baseGitHubUrl = new("https://github.com", UriKind.Absolute);
         private readonly HttpClient _httpClient;
 
-        public GitHubClient()
+        public GitHubClient(int perPage)
         {
+            PerPage = perPage;
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "devmeter");
@@ -41,6 +43,23 @@ namespace devmeter.core.Github
             try
             {
                 var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}");
+                var json = await response.Content.ReadAsStringAsync();
+                return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
+            }
+            catch (HttpRequestException e)
+            {
+                return new GitHubApiResponse(false, e.Message, null);
+            }
+        }
+
+        public async Task<GitHubApiResponse> GetCommits(string absolutePath, int page = 1, int timeSpan = 0)
+        {
+
+            var since = DateTime.UtcNow.AddDays(-timeSpan);
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}/commits?page={page}&since={since}&per_page={PerPage}");
                 var json = await response.Content.ReadAsStringAsync();
                 return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
             }

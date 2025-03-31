@@ -13,9 +13,13 @@ namespace devmeter.ui.ViewModels
         [ObservableProperty]
         private string _totalCommits;
 
+        [ObservableProperty]
+        private string _commitsInLast30Days;
+
         public TotalCommitsViewModel()
         {
             TotalCommits = "-";
+            CommitsInLast30Days = "-";
         }
 
     }

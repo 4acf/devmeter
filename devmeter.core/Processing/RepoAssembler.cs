@@ -30,6 +30,11 @@ namespace devmeter.core.Processing
             _repo.Commits = commits;
         }
 
+        public void UpdateCommitsInLast30Days(int commits)
+        {
+            _repo.CommitsInLast30Days = String.Format($"{commits:n0}"); 
+        }
+
         public void UpdateContributors(string contributors)
         {
             _repo.Contributors = contributors;
