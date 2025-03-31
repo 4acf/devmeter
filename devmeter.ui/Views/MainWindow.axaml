@@ -65,7 +65,11 @@
 				</Grid>
 				
 				<TextBlock Grid.Row="1" Text="ROW ONE"></TextBlock>
-				<TextBlock Grid.Row="2" Text="ROW TWO"></TextBlock>
+				<Grid Grid.Row="2" ColumnDefinitions="1.5*, *">
+					<Border Grid.Column="1" CornerRadius="10" Width="350" Height="299" BoxShadow="5 5 10 0 #111111" HorizontalAlignment="Right">
+						<components:TopContributorsView ></components:TopContributorsView>
+					</Border>
+				</Grid>
 			</Grid>
 		</Grid>
 		

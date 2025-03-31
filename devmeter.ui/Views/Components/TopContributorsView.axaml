@@ -3,6 +3,69 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="devmeter.ui.Views.Components.TopContributorsView">
-  Welcome to Avalonia!
+             x:Class="devmeter.ui.Views.Components.TopContributorsView"
+			 Background="Transparent">
+
+	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+		<Grid RowDefinitions="Auto, *" Width="300" Height="250" Margin="25">
+			<TextBlock Grid.Row="0" Classes="h3gray" Text="Top Contributors" Margin="3 0 0 10"></TextBlock>
+			<StackPanel Grid.Row="1" Orientation="Vertical" Spacing="3">
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3gray">User</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3gray" HorizontalAlignment="Right">Lines Added</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3gray" HorizontalAlignment="Right">Deleted</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-50,130</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-1.3m</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+500,000</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					</Grid>
+				</Border>
+				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
+					<Grid ColumnDefinitions="1.9*, *, *">
+						<TextBlock Grid.Column="0" Classes="h3white">My name is really lo...</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
+						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					</Grid>
+				</Border>
+				<Grid ColumnDefinitions="1.9*, *, *">
+					<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
+					<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">-</TextBlock>
+					<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-</TextBlock>
+				</Grid>
+			</StackPanel>
+		</Grid>
+	</Border>
+	
 </UserControl>
