@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using devmeter.core.Github;
 using devmeter.core.Github.Models;
 using devmeter.core.Processing;
+using devmeter.core.Processing.Formatting;
 using devmeter.ui.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -111,13 +112,14 @@ namespace devmeter.ui.ViewModels
                 if (recentCommitsResponse.Succeeded && recentCommitsResponse.SerializedData != null)
                 {
                     var deserializedRecentCommits = JsonSerializer.Deserialize<List<GitHubCommit>>(recentCommitsResponse.SerializedData);
-                    if (deserializedRecentCommits != null)
+                    if (deserializedRecentCommits == null)
                     {
-                        recentCommits += deserializedRecentCommits.Count;
-                        if (deserializedRecentCommits.Count < _gitHubClient.PerPage)
-                        {
-                            break;
-                        }
+                        break;
+                    }
+                    recentCommits += deserializedRecentCommits.Count;
+                    if (deserializedRecentCommits.Count < _gitHubClient.PerPage)
+                    {
+                        break;
                     }
                 }
                 else
@@ -131,15 +133,16 @@ namespace devmeter.ui.ViewModels
                     return;
                 }
             }
-            repoAssembler.UpdateCommitsInLast30Days(recentCommits)
+            repoAssembler.UpdateCommitsInLast30Days(recentCommits);
 
-            //update ui
+            //update ui (todo: define all rules for formatting this data in stringformatting class)
             var repo = repoAssembler.GetRepo();
             RepoName = repo.Name;
             ErrorMessage = string.Empty;
             TotalCommitsViewModel.TotalCommits = repo.Commits;
             TotalCommitsViewModel.CommitsInLast30Days = $"+{repo.CommitsInLast30Days} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = repo.Contributors;
+            TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(repo.Commits, repo.Contributors)}";
 
         }
 
