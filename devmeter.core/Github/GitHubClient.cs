@@ -22,6 +22,20 @@ namespace devmeter.core.Github
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "devmeter");
         }
 
+        public async Task<GitHubHtmlResponse> GetMainPageHtml(string absolutePath)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseGitHubUrl}{absolutePath}");
+                var html = await response.Content.ReadAsStringAsync();
+                return new GitHubHtmlResponse(response.IsSuccessStatusCode, response.StatusCode, null, html);
+            }
+            catch (HttpRequestException e)
+            {
+                return new GitHubHtmlResponse(false, e.StatusCode, e.Message, null);
+            }
+        }
+
         public async Task<GitHubApiResponse> GetRepositoryInformation(string absolutePath)
         {
             try
@@ -36,23 +50,18 @@ namespace devmeter.core.Github
             }
         }
 
-        public async Task<GitHubHtmlResponse> GetCommits(string absolutePath)
+        public async Task<GitHubApiResponse> GetContributors(string absolutePath, int page)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseGitHubUrl}{absolutePath}");
-                var html = await response.Content.ReadAsStringAsync();
-                return new GitHubHtmlResponse(response.IsSuccessStatusCode, response.StatusCode, null, html);
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}/contributors?page={page}");
+                var json = await response.Content.ReadAsStringAsync();
+                return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
             }
             catch (HttpRequestException e)
             {
-                return new GitHubHtmlResponse(false, e.StatusCode, e.Message, null);
-            } 
-        }
-
-        public async Task<string> GetContributors(string absolutePath)
-        {
-            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{absolutePath}/contributors");
+                return new GitHubApiResponse(false, e.Message, null);
+            }
         }
 
         public async Task<string> GetFileTreeRoot(string absolutePath)

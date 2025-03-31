@@ -30,5 +30,10 @@ namespace devmeter.core.Processing
             _repo.Commits = commits;
         }
 
+        public void UpdateContributors(string contributors)
+        {
+            _repo.Contributors = contributors;
+        }
+
     }
 }

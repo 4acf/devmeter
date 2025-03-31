@@ -30,12 +30,14 @@ namespace devmeter.ui.ViewModels
         private readonly GitHubClient _gitHubClient;
 
         public TotalCommitsViewModel TotalCommitsViewModel { get; }
+        public TotalContributorsViewModel TotalContributorsViewModel { get; }
 
         public MainWindowViewModel()
         {
             RepoName = "-";
             _gitHubClient = new GitHubClient();
             TotalCommitsViewModel = new TotalCommitsViewModel();
+            TotalContributorsViewModel = new TotalContributorsViewModel();
         }
 
         [RelayCommand]
@@ -74,27 +76,39 @@ namespace devmeter.ui.ViewModels
                 return;
             }
 
-            //commits
-            var commitsResponse = await _gitHubClient.GetCommits(parseResult);
-            if (commitsResponse.Succeeded && commitsResponse.HtmlData != null)
+            //commits + contributions
+            var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(parseResult);
+            if (mainPageHtmlResponse.Succeeded && mainPageHtmlResponse.HtmlData != null)
             {
-                var numCommitsString = HtmlParser.ExtractCommitsFromHtml(commitsResponse.HtmlData);
-                if (numCommitsString != null)
+                var htmlDocumentParser = new HtmlDocumentParser(mainPageHtmlResponse.HtmlData);
+                var numCommitsString = htmlDocumentParser.ExtractCommitsFromHtml();
+                if (!string.IsNullOrEmpty(numCommitsString))
                 {
                     repoAssembler.UpdateCommits(numCommitsString);
                 }
+
+                var numContributorsString = htmlDocumentParser.ExtractContributorsFromHtml();
+                if (string.IsNullOrEmpty(numContributorsString))
+                {
+                    numContributorsString = "1";
+                }
+                repoAssembler.UpdateContributors(numContributorsString);
+
             }
             else
             {
-                var errorMessage = commitsResponse.ErrorMessage ?? commitsResponse.StatusCode.ToString();
+                var errorMessage = mainPageHtmlResponse.ErrorMessage ?? mainPageHtmlResponse.StatusCode.ToString();
                 ErrorMessage = errorMessage ?? "Unexpected error";
                 return;
             }
+
+            //contributors
 
             var repo = repoAssembler.GetRepo();
             RepoName = repo.Name;
             ErrorMessage = string.Empty;
             TotalCommitsViewModel.TotalCommits = repo.Commits;
+            TotalContributorsViewModel.TotalContributors = repo.Contributors;
 
         }
 

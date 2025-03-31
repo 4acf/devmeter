@@ -10,7 +10,7 @@ namespace devmeter.ui.Core.Models
     {
         public string Name { get; set; } = string.Empty;
         public string Commits { get; set; } = string.Empty;
-        public int Contributors { get; set; }
+        public string Contributors { get; set; } = string.Empty;
         public List<Contributor> TopContributors { get; set; } = [];
         public List<IFilesystemObject> FilesystemObjects { get; set; } = [];
     }

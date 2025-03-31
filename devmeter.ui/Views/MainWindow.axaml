@@ -60,7 +60,7 @@
 						<components:TotalCommitsView DataContext="{Binding TotalCommitsViewModel}"></components:TotalCommitsView>
 					</Border>
 					<Border Grid.Column="2" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
-						<components:TotalContributorsView ></components:TotalContributorsView>
+						<components:TotalContributorsView DataContext="{Binding TotalContributorsViewModel}"></components:TotalContributorsView>
 					</Border>
 				</Grid>
 				
