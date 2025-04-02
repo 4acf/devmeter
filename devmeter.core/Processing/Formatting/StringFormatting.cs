@@ -8,6 +8,7 @@ namespace devmeter.core.Processing.Formatting
 {
     public static class StringFormatting
     {
+
         public static string DivideStrings(string dividendString, string divisorString)
         {
 

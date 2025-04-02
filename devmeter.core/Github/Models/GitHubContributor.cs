@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace devmeter.core.Github.Models
 {
-    public record class GitHubCommit(
-        [property: JsonPropertyName("url")] string Url,
-        [property: JsonPropertyName("html_url")] string HtmlUrl
+    public record class GitHubContributor(
+        [property: JsonPropertyName("login")] string Username,
+        [property: JsonPropertyName("contributions")] int Contributions
     );
 }

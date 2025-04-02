@@ -10,7 +10,5 @@ namespace devmeter.ui.Core.Models
     {
         public string Name { get; set; } = string.Empty;
         public int Contributions { get; set; }
-        public int LinesAdded { get; set; }
-        public int LinesRemoved { get; set; }
     }
 }

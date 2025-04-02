@@ -6,6 +6,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <UserSecretsId>db9e4a3f-a395-440b-92b8-8b25d6fea4fb</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,8 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.3.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

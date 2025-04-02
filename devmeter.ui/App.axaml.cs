@@ -5,15 +5,25 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using devmeter.ui.ViewModels;
 using devmeter.ui.Views;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 
 namespace devmeter.ui
 {
     public partial class App : Application
     {
+
+        public static IConfiguration? Configuration { get; private set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+
+            Configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddUserSecrets<App>()
+            .Build();
         }
 
         public override void OnFrameworkInitializationCompleted()

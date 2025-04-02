@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="devmeter.ui.Views.Components.TopContributorsView"
+			 xmlns:vm="using:devmeter.ui.ViewModels"
+			 x:DataType="vm:TopContributorsViewModel"
 			 Background="Transparent">
 
 	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -11,58 +13,50 @@
 			<TextBlock Grid.Row="0" Classes="h3gray" Text="Top Contributors" Margin="3 0 0 10"></TextBlock>
 			<StackPanel Grid.Row="1" Orientation="Vertical" Spacing="3">
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
+					<Grid ColumnDefinitions="*, *">
 						<TextBlock Grid.Column="0" Classes="h3gray">User</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3gray" HorizontalAlignment="Right">Lines Added</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3gray" HorizontalAlignment="Right">Deleted</TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3gray" HorizontalAlignment="Right">Contributions</TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-50,130</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row0Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row0Col1}"></TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-1.3m</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row1Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row1Col1}"></TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row2Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row2Col1}"></TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+500,000</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row3Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row3Col1}"></TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row4Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row4Col1}"></TextBlock>
 					</Grid>
 				</Border>
 				<Border BorderBrush="#2A2B2D" BorderThickness="0 0 0 1">
-					<Grid ColumnDefinitions="1.9*, *, *">
-						<TextBlock Grid.Column="0" Classes="h3white">My name is really lo...</TextBlock>
-						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">+50</TextBlock>
-						<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-123,123</TextBlock>
+					<Grid ColumnDefinitions="*, *">
+						<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row5Col0}"></TextBlock>
+						<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row5Col1}"></TextBlock>
 					</Grid>
 				</Border>
-				<Grid ColumnDefinitions="1.9*, *, *">
-					<TextBlock Grid.Column="0" Classes="h3white">-</TextBlock>
-					<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Left">-</TextBlock>
-					<TextBlock Grid.Column="2" Classes="h3red" HorizontalAlignment="Right">-</TextBlock>
+				<Grid ColumnDefinitions="*, *">
+					<TextBlock Grid.Column="0" Classes="h3white" Text="{Binding Row6Col0}"></TextBlock>
+					<TextBlock Grid.Column="1" Classes="h3green" HorizontalAlignment="Right" Text="{Binding Row6Col1}"></TextBlock>
 				</Grid>
 			</StackPanel>
 		</Grid>
