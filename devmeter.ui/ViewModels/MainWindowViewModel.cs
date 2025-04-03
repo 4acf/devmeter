@@ -54,7 +54,7 @@ namespace devmeter.ui.ViewModels
         private static string HandleError(GitHubApiResponse response)
         {
             var errorMessage = response.ErrorMessage;
-            if(errorMessage == null && response.SerializedData != null)
+            if(errorMessage == null && !string.IsNullOrEmpty(response.SerializedData))
             {
                 errorMessage = JsonSerializer.Deserialize<GitHubApiError>(response.SerializedData)?.Message;
             }
@@ -84,7 +84,7 @@ namespace devmeter.ui.ViewModels
 
             //general info
             var generalInfoResponse = await _gitHubClient.GetRepositoryInformation(parseResult);
-            if(!generalInfoResponse.Succeeded || generalInfoResponse.SerializedData == null)
+            if(!generalInfoResponse.Succeeded || string.IsNullOrEmpty(generalInfoResponse.SerializedData))
             {
                 ErrorMessage = HandleError(generalInfoResponse);
                 return;
@@ -97,7 +97,7 @@ namespace devmeter.ui.ViewModels
 
             //total commits + contributions
             var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(parseResult);
-            if (!mainPageHtmlResponse.Succeeded || mainPageHtmlResponse.HtmlData == null)
+            if (!mainPageHtmlResponse.Succeeded || string.IsNullOrEmpty(mainPageHtmlResponse.HtmlData))
             {
                 ErrorMessage = HandleError(mainPageHtmlResponse);
                 return;
@@ -117,7 +117,7 @@ namespace devmeter.ui.ViewModels
 
             //get handles of the top contributors
             var topContributorsResponse = await _gitHubClient.GetContributors(parseResult, _topContributorsSize);
-            if (!topContributorsResponse.Succeeded || topContributorsResponse.SerializedData == null)
+            if (!topContributorsResponse.Succeeded || string.IsNullOrEmpty(topContributorsResponse.SerializedData))
             {
                 ErrorMessage = HandleError(topContributorsResponse);
                 return;
@@ -143,7 +143,7 @@ namespace devmeter.ui.ViewModels
             while (true)
             {
                 var recentCommitsResponse = await _gitHubClient.GetCommits(parseResult, page, 30, 100);
-                if (!recentCommitsResponse.Succeeded || recentCommitsResponse.SerializedData == null)
+                if (!recentCommitsResponse.Succeeded || string.IsNullOrEmpty(recentCommitsResponse.SerializedData))
                 {
                     ErrorMessage = HandleError(recentCommitsResponse);
                     return;

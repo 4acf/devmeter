@@ -13,6 +13,6 @@ namespace devmeter.ui.Core.Models
         public int CommitsInLast30Days { get; set; }
         public string Contributors { get; set; } = string.Empty;
         public List<Contributor> TopContributors { get; set; } = [];
-        public List<IFilesystemObject> FilesystemObjects { get; set; } = [];
+        public Folder? Root { get; set; }
     }
 }

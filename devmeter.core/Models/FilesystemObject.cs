@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace devmeter.ui.Core.Models
 {
-    public interface IFilesystemObject
+    public abstract class FilesystemObject
     {
-        string Name { get; set; }
-        bool Disabled { get; set; }
+        string Name { get; set; } = string.Empty;
         int LinesOfCode { get; set; }
         int LinesOfWhitespace { get; set; }
     }
