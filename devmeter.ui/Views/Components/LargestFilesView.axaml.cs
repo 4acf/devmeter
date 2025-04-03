@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace devmeter.ui.Views.Components;
 
-public partial class LOCOverTimeView : UserControl
+public partial class LargestFilesView : UserControl
 {
-    public LOCOverTimeView()
+    public LargestFilesView()
     {
         InitializeComponent();
     }

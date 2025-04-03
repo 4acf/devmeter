@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace devmeter.ui.Views.Components;
 
-public partial class DirectoryTreeView : UserControl
+public partial class FilesOverTimeView : UserControl
 {
-    public DirectoryTreeView()
+    public FilesOverTimeView()
     {
         InitializeComponent();
     }

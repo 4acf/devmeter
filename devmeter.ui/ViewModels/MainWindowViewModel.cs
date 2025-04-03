@@ -34,6 +34,9 @@ namespace devmeter.ui.ViewModels
 
         public TotalCommitsViewModel TotalCommitsViewModel { get; }
         public TotalContributorsViewModel TotalContributorsViewModel { get; }
+        public LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
+        public FilesOverTimeViewModel FilesOverTimeViewModel { get; }
+        public LargestFilesViewModel LargestFilesViewModel { get; }
         public TopContributorsViewModel TopContributorsViewModel { get; }
 
         public MainWindowViewModel()
@@ -42,6 +45,9 @@ namespace devmeter.ui.ViewModels
             _gitHubClient = new GitHubClient(App.Configuration?["PAT"]);
             TotalCommitsViewModel = new TotalCommitsViewModel();
             TotalContributorsViewModel = new TotalContributorsViewModel();
+            LanguageBreakdownViewModel = new LanguageBreakdownViewModel();
+            FilesOverTimeViewModel = new FilesOverTimeViewModel();
+            LargestFilesViewModel = new LargestFilesViewModel();
             TopContributorsViewModel = new TopContributorsViewModel();
         }
 
@@ -110,7 +116,6 @@ namespace devmeter.ui.ViewModels
             repoAssembler.UpdateContributors(numContributorsString);
 
             //get handles of the top contributors
-            var topContributors = new List<Contributor>();
             var topContributorsResponse = await _gitHubClient.GetContributors(parseResult, _topContributorsSize);
             if (!topContributorsResponse.Succeeded || topContributorsResponse.SerializedData == null)
             {
@@ -120,6 +125,7 @@ namespace devmeter.ui.ViewModels
             var deserializedTopContributors = JsonSerializer.Deserialize<List<GitHubContributor>>(topContributorsResponse.SerializedData);
             if (deserializedTopContributors != null)
             {
+                var topContributors = new List<Contributor>();
                 for (int i = 0; i < deserializedTopContributors.Count; i++)
                 {
                     topContributors.Add(new Contributor
@@ -128,6 +134,7 @@ namespace devmeter.ui.ViewModels
                         Contributions = deserializedTopContributors[i].Contributions,
                     });
                 }
+                repoAssembler.UpdateTopContributors(topContributors);
             }
 
             //commits in last 30 days
@@ -163,7 +170,7 @@ namespace devmeter.ui.ViewModels
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{repo.CommitsInLast30Days:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = repo.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(repo.Commits, repo.Contributors)}";
-            TopContributorsViewModel.Update(topContributors);
+            TopContributorsViewModel.Update(repo.TopContributors);
 
             ErrorMessage = string.Empty;
 
