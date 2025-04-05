@@ -52,20 +52,6 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<GitHubApiResponse> GetRepositoryInformation(string repoHandle)
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{repoHandle}");
-                var json = await response.Content.ReadAsStringAsync();
-                return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
-            }
-            catch (HttpRequestException e)
-            {
-                return new GitHubApiResponse(false, e.Message, null);
-            }
-        }
-
         public async Task<GitHubApiResponse> GetCommits(string repoHandle, int page = 1, int timeSpan = -1, int perPage = 100)
         {
 
@@ -76,8 +62,6 @@ namespace DevMeter.Core.Github
                 var since = DateTime.UtcNow.AddDays(-timeSpan);
                 url.Append($"&since={since}");
             }
-
-            Debug.WriteLine(url);
 
             try
             {
@@ -103,11 +87,6 @@ namespace DevMeter.Core.Github
             {
                 return new GitHubApiResponse(false, e.Message, null);
             }
-        }
-
-        public async Task<string> GetFileTreeRoot(string repoHandle)
-        {
-            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{repoHandle}/contents/");
         }
 
     }

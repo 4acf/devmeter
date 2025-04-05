@@ -83,19 +83,6 @@ namespace DevMeter.UI.ViewModels
 
             var repoAssembler = new RepoAssembler(new Repo());
 
-            //general info
-            var generalInfoResponse = await _gitHubClient.GetRepositoryInformation(repoHandle);
-            if(!generalInfoResponse.Succeeded || string.IsNullOrEmpty(generalInfoResponse.SerializedData))
-            {
-                ErrorMessage = HandleError(generalInfoResponse);
-                return;
-            }
-            var deserializedGeneralInfo = JsonSerializer.Deserialize<GitHubGeneralInformation>(generalInfoResponse.SerializedData);
-            if (deserializedGeneralInfo != null)
-            {
-                repoAssembler.UpdateGeneralInfo(deserializedGeneralInfo);
-            }
-
             //total commits + contributions
             var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(repoHandle);
             if (!mainPageHtmlResponse.Succeeded || string.IsNullOrEmpty(mainPageHtmlResponse.HtmlData))
