@@ -24,11 +24,11 @@ namespace DevMeter.Core.Github
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {pat}");
         }
 
-        public async Task<GitHubHtmlResponse> GetMainPageHtml(string absolutePath)
+        public async Task<GitHubHtmlResponse> GetMainPageHtml(string repoHandle)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseGitHubUrl}{absolutePath}");
+                var response = await _httpClient.GetAsync($"{_baseGitHubUrl}{repoHandle}");
                 var html = await response.Content.ReadAsStringAsync();
                 return new GitHubHtmlResponse(response.IsSuccessStatusCode, response.StatusCode, null, html);
             }
@@ -38,11 +38,11 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<GitHubHtmlResponse> GetPageHtml(string path)
+        public async Task<GitHubHtmlResponse> GetPageHtml(string htmlUrl)
         {
             try
             {
-                var response = await _httpClient.GetAsync(path);
+                var response = await _httpClient.GetAsync(htmlUrl);
                 var html = await response.Content.ReadAsStringAsync();
                 return new GitHubHtmlResponse(response.IsSuccessStatusCode, response.StatusCode, null, html);
             }
@@ -52,11 +52,11 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<GitHubApiResponse> GetRepositoryInformation(string absolutePath)
+        public async Task<GitHubApiResponse> GetRepositoryInformation(string repoHandle)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}");
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{repoHandle}");
                 var json = await response.Content.ReadAsStringAsync();
                 return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
             }
@@ -66,11 +66,11 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<GitHubApiResponse> GetCommits(string absolutePath, int page = 1, int timeSpan = -1, int perPage = 100)
+        public async Task<GitHubApiResponse> GetCommits(string repoHandle, int page = 1, int timeSpan = -1, int perPage = 100)
         {
 
             var url = new StringBuilder();
-            url.Append($"{_baseApiUrl}repos{absolutePath}/commits?page={page}&per_page={perPage}");
+            url.Append($"{_baseApiUrl}repos{repoHandle}/commits?page={page}&per_page={perPage}");
             if(timeSpan != -1)
             {
                 var since = DateTime.UtcNow.AddDays(-timeSpan);
@@ -91,11 +91,11 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<GitHubApiResponse> GetContributors(string absolutePath, int perPage = 100)
+        public async Task<GitHubApiResponse> GetContributors(string repoHandle, int perPage = 100)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{absolutePath}/contributors?per_page={perPage}");
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{repoHandle}/contributors?per_page={perPage}");
                 var json = await response.Content.ReadAsStringAsync();
                 return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
             }
@@ -105,9 +105,9 @@ namespace DevMeter.Core.Github
             }
         }
 
-        public async Task<string> GetFileTreeRoot(string absolutePath)
+        public async Task<string> GetFileTreeRoot(string repoHandle)
         {
-            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{absolutePath}/contents/");
+            return await _httpClient.GetStringAsync($"{_baseApiUrl}repos{repoHandle}/contents/");
         }
 
     }

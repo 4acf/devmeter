@@ -71,11 +71,12 @@ namespace DevMeter.UI.ViewModels
         private async Task Search()
         {
 
-            if(InputParser.TryParse(SearchString, out var parseResult) == false)
+            if(!InputParser.TryParse(SearchString, out var result))
             {
-                ErrorMessage = parseResult;
+                ErrorMessage = result;
                 return;
             }
+            var repoHandle = result;
 
             //each request is done sequentially to handle errors and rate limits 
             //https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#avoid-concurrent-requests
@@ -83,7 +84,7 @@ namespace DevMeter.UI.ViewModels
             var repoAssembler = new RepoAssembler(new Repo());
 
             //general info
-            var generalInfoResponse = await _gitHubClient.GetRepositoryInformation(parseResult);
+            var generalInfoResponse = await _gitHubClient.GetRepositoryInformation(repoHandle);
             if(!generalInfoResponse.Succeeded || string.IsNullOrEmpty(generalInfoResponse.SerializedData))
             {
                 ErrorMessage = HandleError(generalInfoResponse);
@@ -96,7 +97,7 @@ namespace DevMeter.UI.ViewModels
             }
 
             //total commits + contributions
-            var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(parseResult);
+            var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(repoHandle);
             if (!mainPageHtmlResponse.Succeeded || string.IsNullOrEmpty(mainPageHtmlResponse.HtmlData))
             {
                 ErrorMessage = HandleError(mainPageHtmlResponse);
@@ -116,7 +117,7 @@ namespace DevMeter.UI.ViewModels
             repoAssembler.UpdateContributors(numContributorsString);
 
             //get handles of the top contributors
-            var topContributorsResponse = await _gitHubClient.GetContributors(parseResult, _topContributorsSize);
+            var topContributorsResponse = await _gitHubClient.GetContributors(repoHandle, _topContributorsSize);
             if (!topContributorsResponse.Succeeded || string.IsNullOrEmpty(topContributorsResponse.SerializedData))
             {
                 ErrorMessage = HandleError(topContributorsResponse);
@@ -142,7 +143,7 @@ namespace DevMeter.UI.ViewModels
             int recentCommits = 0;
             while (true)
             {
-                var recentCommitsResponse = await _gitHubClient.GetCommits(parseResult, page, 30, 100);
+                var recentCommitsResponse = await _gitHubClient.GetCommits(repoHandle, page, 30, 100);
                 if (!recentCommitsResponse.Succeeded || string.IsNullOrEmpty(recentCommitsResponse.SerializedData))
                 {
                     ErrorMessage = HandleError(recentCommitsResponse);
@@ -165,7 +166,7 @@ namespace DevMeter.UI.ViewModels
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             var repo = repoAssembler.GetRepo();
-            RepoName = repo.Name;
+            RepoName = repoHandle.Substring(1);
             TotalCommitsViewModel.TotalCommits = repo.Commits;
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{repo.CommitsInLast30Days:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = repo.Contributors;
