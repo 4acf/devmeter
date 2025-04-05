@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using devmeter.core.Github;
-using devmeter.core.Github.Models;
-using devmeter.core.Processing;
-using devmeter.core.Processing.Formatting;
-using devmeter.Core.Models;
+using DevMeter.Core.Github;
+using DevMeter.Core.Github.Models;
+using DevMeter.Core.Processing;
+using DevMeter.Core.Processing.Formatting;
+using DevMeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace devmeter.ui.ViewModels
+namespace DevMeter.UI.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {

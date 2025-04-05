@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace devmeter.ui.Views
+namespace DevMeter.UI.Views
 {
     public partial class MainWindow : Window
     {

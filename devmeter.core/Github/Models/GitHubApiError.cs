@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Github.Models
+namespace DevMeter.Core.Github.Models
 {
     public record class GitHubApiError(
         [property: JsonPropertyName("message")] string Message,

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Processing
+namespace DevMeter.Core.Processing
 {
     public static partial class InputParser
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Processing.Formatting
+namespace DevMeter.Core.Processing.Formatting
 {
     public static class StringFormatting
     {

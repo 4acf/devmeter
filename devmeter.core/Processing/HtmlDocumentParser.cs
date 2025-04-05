@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace devmeter.core.Processing
+namespace DevMeter.Core.Processing
 {
 
     public class HtmlDocumentParser

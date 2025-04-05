@@ -3,13 +3,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using devmeter.ui.ViewModels;
-using devmeter.ui.Views;
+using DevMeter.UI.ViewModels;
+using DevMeter.UI.Views;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 
-namespace devmeter.ui
+namespace DevMeter.UI
 {
     public partial class App : Application
     {

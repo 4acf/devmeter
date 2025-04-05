@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using devmeter.Core.Models;
+using DevMeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.ui.ViewModels
+namespace DevMeter.UI.ViewModels
 {
     public partial class TopContributorsViewModel : ViewModelBase
     {

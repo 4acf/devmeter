@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.Core.Models
+namespace DevMeter.Core.Models
 {
     public abstract class FilesystemObject
     {

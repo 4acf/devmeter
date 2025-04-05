@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.ui.ViewModels
+namespace DevMeter.UI.ViewModels
 {
     public partial class TotalCommitsViewModel : ViewModelBase
     {

@@ -5,8 +5,8 @@
 			 xmlns:lv="clr-namespace:LiveChartsCore;assembly=LiveChartsCore"
 			 xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="devmeter.ui.Views.Components.LargestFilesView"
-			 xmlns:vm="using:devmeter.ui.ViewModels"
+             x:Class="DevMeter.UI.Views.Components.LargestFilesView"
+			 xmlns:vm="using:DevMeter.UI.ViewModels"
 			 x:DataType="vm:LargestFilesViewModel"
 			 Background="Transparent">
 

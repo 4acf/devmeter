@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devmeter.ui", "devmeter.ui\devmeter.ui.csproj", "{3346207C-4838-432D-A51F-EA20F2B125B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevMeter.UI", "devmeter.ui\DevMeter.UI.csproj", "{3346207C-4838-432D-A51F-EA20F2B125B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devmeter.core", "devmeter.core\devmeter.core.csproj", "{248EB5FB-7A1D-4F33-8A01-6888BA8FDE36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevMeter.Core", "devmeter.core\DevMeter.Core.csproj", "{248EB5FB-7A1D-4F33-8A01-6888BA8FDE36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

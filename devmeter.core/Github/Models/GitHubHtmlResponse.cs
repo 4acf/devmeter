@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Github.Models
+namespace DevMeter.Core.Github.Models
 {
     public class GitHubHtmlResponse
     {

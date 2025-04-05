@@ -1,5 +1,5 @@
-﻿using devmeter.core.Github.Models;
-using devmeter.Core.Models;
+﻿using DevMeter.Core.Github.Models;
+using DevMeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Processing
+namespace DevMeter.Core.Processing
 {
     public class RepoAssembler
     {

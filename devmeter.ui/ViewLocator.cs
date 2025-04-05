@@ -1,9 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using devmeter.ui.ViewModels;
+using DevMeter.UI.ViewModels;
 using System;
 
-namespace devmeter.ui
+namespace DevMeter.UI
 {
     public class ViewLocator : IDataTemplate
     {

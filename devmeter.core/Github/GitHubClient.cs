@@ -5,9 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using devmeter.core.Github.Models;
+using DevMeter.Core.Github.Models;
 
-namespace devmeter.core.Github
+namespace DevMeter.Core.Github
 {
     public class GitHubClient
     {

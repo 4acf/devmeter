@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\devmeter.core\devmeter.core.csproj" />
+    <ProjectReference Include="..\devmeter.core\DevMeter.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

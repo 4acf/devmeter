@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace devmeter.core.Utils
+namespace DevMeter.Core.Utils
 {
     public static class Filetypes
     {

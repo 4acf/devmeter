@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace devmeter.ui
+namespace DevMeter.UI
 {
     internal sealed class Program
     {
