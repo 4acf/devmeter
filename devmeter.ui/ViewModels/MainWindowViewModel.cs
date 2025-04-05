@@ -4,7 +4,7 @@ using devmeter.core.Github;
 using devmeter.core.Github.Models;
 using devmeter.core.Processing;
 using devmeter.core.Processing.Formatting;
-using devmeter.ui.Core.Models;
+using devmeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
