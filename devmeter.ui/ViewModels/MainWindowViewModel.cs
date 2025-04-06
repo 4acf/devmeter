@@ -31,8 +31,6 @@ namespace DevMeter.UI.ViewModels
 
         private readonly GitHubClient _gitHubClient;
 
-        private const int _topContributorsSize = 7;
-
         public TotalCommitsViewModel TotalCommitsViewModel { get; }
         public TotalContributorsViewModel TotalContributorsViewModel { get; }
         public LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
@@ -72,7 +70,7 @@ namespace DevMeter.UI.ViewModels
         private async Task Search()
         {
 
-            if(!InputParser.TryParse(SearchString, out var result))
+            if (!InputParser.TryParse(SearchString, out var result))
             {
                 ErrorMessage = result;
                 return;
@@ -85,6 +83,7 @@ namespace DevMeter.UI.ViewModels
             var repoAssembler = new RepoAssembler(new Repo());
             var dataCollector = new DataCollector(_gitHubClient, repoHandle);
 
+            //get number of commits + number of contributors
             var htmlData = await dataCollector.GetHtmlData();
             if (!htmlData.Succeeded || htmlData == null)
             {
@@ -95,32 +94,27 @@ namespace DevMeter.UI.ViewModels
                 return;
             }
             var unpackedHtmlData = htmlData.Value;
-            if(unpackedHtmlData == null)
+            if (unpackedHtmlData == null)
             {
                 ErrorMessage = Errors.Unexpected;
                 return;
             }
 
             //get handles of the top contributors
-            var topContributorsResponse = await _gitHubClient.GetContributors(repoHandle, _topContributorsSize);
-            if (!topContributorsResponse.Succeeded || string.IsNullOrEmpty(topContributorsResponse.SerializedData))
+            var topContributorData = await dataCollector.GetTopContributorData();
+            if (!topContributorData.Succeeded || topContributorData == null)
             {
-                ErrorMessage = HandleError(topContributorsResponse);
+                if (topContributorData == null)
+                    ErrorMessage = Errors.Unexpected;
+                else
+                    ErrorMessage = topContributorData.ErrorMessage;
                 return;
             }
-            var deserializedTopContributors = JsonSerializer.Deserialize<List<GitHubContributor>>(topContributorsResponse.SerializedData);
-            if (deserializedTopContributors != null)
+            var unpackedTopContributorsData = topContributorData.Value;
+            if(unpackedTopContributorsData == null)
             {
-                var topContributors = new List<Contributor>();
-                for (int i = 0; i < deserializedTopContributors.Count; i++)
-                {
-                    topContributors.Add(new Contributor
-                    {
-                        Name = deserializedTopContributors[i].Username,
-                        Contributions = deserializedTopContributors[i].Contributions,
-                    });
-                }
-                repoAssembler.UpdateTopContributors(topContributors);
+                ErrorMessage = Errors.Unexpected;
+                return;
             }
 
             //commits in last 30 days
@@ -156,7 +150,7 @@ namespace DevMeter.UI.ViewModels
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{repo.CommitsInLast30Days:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(repo.Commits, repo.Contributors)}";
-            TopContributorsViewModel.Update(repo.TopContributors);
+            TopContributorsViewModel.Update(unpackedTopContributorsData);
 
             ErrorMessage = string.Empty;
 

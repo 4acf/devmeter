@@ -8,6 +8,7 @@ namespace DevMeter.Core.Utils
 {
     public static class Errors
     {
+        public const string CantReadTopContributors = "Error reading top contributors";
         public const string Unexpected = "Unexpected error";
     }
 }

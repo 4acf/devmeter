@@ -1,5 +1,6 @@
 ﻿using DevMeter.Core.Github;
 using DevMeter.Core.Github.Models;
+using DevMeter.Core.Models;
 using DevMeter.Core.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace DevMeter.Core.Processing
 
         private GitHubClient _gitHubClient;
         private string _repoHandle;
+        private const int _topContributorsSize = 7;
 
         public DataCollector(GitHubClient gitHubClient, string repoHandle)
         {
@@ -65,6 +67,36 @@ namespace DevMeter.Core.Processing
 
             var htmlData = new HtmlData(numCommitsString, numContributorsString);
             return new Result<HtmlData>(true, null, htmlData);
+        }
+
+        public async Task<Result<List<Contributor>>> GetTopContributorData()
+        {
+            var topContributorsResponse = await _gitHubClient.GetContributors(_repoHandle, _topContributorsSize);
+            if (!topContributorsResponse.Succeeded || string.IsNullOrEmpty(topContributorsResponse.SerializedData))
+            {
+                var result = new Result<List<Contributor>>(false, HandleError(topContributorsResponse), null);
+                return result;
+            }
+
+            var deserializedTopContributors = JsonSerializer.Deserialize<List<GitHubContributor>>(topContributorsResponse.SerializedData);
+            if (deserializedTopContributors == null)
+            {
+                var result = new Result<List<Contributor>>(false, Errors.CantReadTopContributors, null);
+                return result;
+            }
+
+            var topContributors = new List<Contributor>();
+            for (int i = 0; i < deserializedTopContributors.Count; i++)
+            {
+                topContributors.Add(new Contributor
+                {
+                    Name = deserializedTopContributors[i].Username,
+                    Contributions = deserializedTopContributors[i].Contributions,
+                });
+            }
+
+            return new Result<List<Contributor>>(true, null, topContributors);
+
         }
 
     }
