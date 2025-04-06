@@ -81,7 +81,6 @@ namespace DevMeter.UI.ViewModels
             //each request is done sequentially to handle errors and rate limits 
             //https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#avoid-concurrent-requests
 
-            var repoAssembler = new RepoAssembler(new Repo());
             var dataCollector = new DataCollector(_gitHubClient, repoHandle);
 
             //get number of commits + number of contributors
@@ -136,7 +135,6 @@ namespace DevMeter.UI.ViewModels
             //interpreting data from file tree
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
-            var repo = repoAssembler.GetRepo();
             RepoName = repoHandle.Substring(1);
             TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
