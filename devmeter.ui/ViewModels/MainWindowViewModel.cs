@@ -13,6 +13,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
+using DevMeter.Core.Utils;
 
 namespace DevMeter.UI.ViewModels
 {
@@ -58,13 +59,13 @@ namespace DevMeter.UI.ViewModels
             {
                 errorMessage = JsonSerializer.Deserialize<GitHubApiError>(response.SerializedData)?.Message;
             }
-            return errorMessage ?? "Unexpected error";
+            return errorMessage ?? Errors.Unexpected;
         }
 
         private static string HandleError(GitHubHtmlResponse response)
         {
             var errorMessage = response.ErrorMessage ?? response.StatusCode.ToString();
-            return errorMessage ?? "Unexpected error";
+            return errorMessage ?? Errors.Unexpected;
         }
 
         [RelayCommand]
@@ -82,26 +83,23 @@ namespace DevMeter.UI.ViewModels
             //https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#avoid-concurrent-requests
 
             var repoAssembler = new RepoAssembler(new Repo());
+            var dataCollector = new DataCollector(_gitHubClient, repoHandle);
 
-            //total commits + contributions
-            var mainPageHtmlResponse = await _gitHubClient.GetMainPageHtml(repoHandle);
-            if (!mainPageHtmlResponse.Succeeded || string.IsNullOrEmpty(mainPageHtmlResponse.HtmlData))
+            var htmlData = await dataCollector.GetHtmlData();
+            if (!htmlData.Succeeded || htmlData == null)
             {
-                ErrorMessage = HandleError(mainPageHtmlResponse);
+                if (htmlData == null)
+                    ErrorMessage = Errors.Unexpected;
+                else
+                    ErrorMessage = htmlData.ErrorMessage;
                 return;
             }
-            var htmlDocumentParser = new HtmlDocumentParser(mainPageHtmlResponse.HtmlData); //todo: make HtmlDocumentParser implement IDisposable so you can use a using statement
-            var numCommitsString = htmlDocumentParser.ExtractCommitsFromHtml();
-            if (!string.IsNullOrEmpty(numCommitsString))
+            var unpackedHtmlData = htmlData.Value;
+            if(unpackedHtmlData == null)
             {
-                repoAssembler.UpdateCommits(numCommitsString);
+                ErrorMessage = Errors.Unexpected;
+                return;
             }
-            var numContributorsString = htmlDocumentParser.ExtractContributorsFromHtml();
-            if (string.IsNullOrEmpty(numContributorsString))
-            {
-                numContributorsString = "1";
-            }
-            repoAssembler.UpdateContributors(numContributorsString);
 
             //get handles of the top contributors
             var topContributorsResponse = await _gitHubClient.GetContributors(repoHandle, _topContributorsSize);
@@ -154,9 +152,9 @@ namespace DevMeter.UI.ViewModels
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             var repo = repoAssembler.GetRepo();
             RepoName = repoHandle.Substring(1);
-            TotalCommitsViewModel.TotalCommits = repo.Commits;
+            TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{repo.CommitsInLast30Days:n0}")} in the last 30 days";
-            TotalContributorsViewModel.TotalContributors = repo.Contributors;
+            TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(repo.Commits, repo.Contributors)}";
             TopContributorsViewModel.Update(repo.TopContributors);
 
