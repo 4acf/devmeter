@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:lv="clr-namespace:LiveChartsCore;assembly=LiveChartsCore"
+			 xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DevMeter.UI.Views.Components.LargestFilesView"
+			 xmlns:vm="using:DevMeter.UI.ViewModels"
+			 x:DataType="vm:LargestFilesViewModel"
+			 Background="Transparent">
+
+	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+		<Grid RowDefinitions="Auto, *" Width="550" Height="250" Margin="25">
+			<TextBlock Grid.Row="0" Classes="h3gray" Text="Largest Files" Margin="3 0 0 10"></TextBlock>
+			<lvc:CartesianChart Grid.Row="1"></lvc:CartesianChart>
+		</Grid>
+	</Border>
+
+</UserControl>
