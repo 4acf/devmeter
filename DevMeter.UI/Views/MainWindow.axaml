@@ -54,7 +54,7 @@
 			<Grid Grid.Row="2" RowDefinitions="Auto, *, *">
 				<Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto">
 					<Border Grid.Column="0" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
-						<components:TotalLinesView ></components:TotalLinesView>
+						<components:TotalLinesView DataContext="{Binding TotalLinesViewModel}"></components:TotalLinesView>
 					</Border>
 					<Border Grid.Column="1" MaxWidth="300" CornerRadius="10" BoxShadow="5 5 10 0 #111111">
 						<components:TotalCommitsView DataContext="{Binding TotalCommitsViewModel}"></components:TotalCommitsView>

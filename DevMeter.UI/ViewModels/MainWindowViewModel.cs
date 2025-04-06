@@ -32,6 +32,7 @@ namespace DevMeter.UI.ViewModels
 
         private readonly GitHubClient _gitHubClient;
 
+        public TotalLinesViewModel TotalLinesViewModel { get; }
         public TotalCommitsViewModel TotalCommitsViewModel { get; }
         public TotalContributorsViewModel TotalContributorsViewModel { get; }
         public LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
@@ -43,6 +44,7 @@ namespace DevMeter.UI.ViewModels
         {
             RepoName = "-";
             _gitHubClient = new GitHubClient(App.Configuration?["PAT"]);
+            TotalLinesViewModel = new TotalLinesViewModel();
             TotalCommitsViewModel = new TotalCommitsViewModel();
             TotalContributorsViewModel = new TotalContributorsViewModel();
             LanguageBreakdownViewModel = new LanguageBreakdownViewModel();
@@ -131,11 +133,27 @@ namespace DevMeter.UI.ViewModels
 
             //reading file tree (slow!)
             var fileTreeData = await dataCollector.GetRootFolderContents();
+            if (!fileTreeData.Succeeded || fileTreeData == null)
+            {
+                if (fileTreeData == null)
+                    ErrorMessage = Errors.Unexpected;
+                else
+                    ErrorMessage = fileTreeData.ErrorMessage;
+                return;
+            }
+            var unpackedFileTree = fileTreeData.Value;
+            if (unpackedFileTree == null)
+            {
+                ErrorMessage = Errors.Unexpected;
+                return;
+            }
 
             //interpreting data from file tree
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             RepoName = repoHandle.Substring(1);
+            TotalLinesViewModel.TotalLines = $"{String.Format($"{unpackedFileTree.LinesOfCode + unpackedFileTree.LinesOfWhitespace:n0}")}";
+            TotalLinesViewModel.TotalLinesExcludingWhitespace = $"Excluding Whitespace: {String.Format($"{unpackedFileTree.LinesOfCode:n0}")}";
             TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
