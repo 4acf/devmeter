@@ -99,6 +99,36 @@ namespace DevMeter.Core.Processing
 
         }
 
+        public async Task<Result<int>> GetRecentCommitsData()
+        {
+            int page = 1;
+            int recentCommits = 0;
+            while (true)
+            {
+                var recentCommitsResponse = await _gitHubClient.GetCommits(_repoHandle, page, 30, 100);
+                if (!recentCommitsResponse.Succeeded || string.IsNullOrEmpty(recentCommitsResponse.SerializedData))
+                {
+                    var result = new Result<int>(false, HandleError(recentCommitsResponse), 0);
+                    return result;
+                }
+
+                var deserializedRecentCommits = JsonSerializer.Deserialize<List<GitHubCommit>>(recentCommitsResponse.SerializedData);
+                if (deserializedRecentCommits == null)
+                {
+                    break;
+                }
+                recentCommits += deserializedRecentCommits.Count;
+                if (deserializedRecentCommits.Count < 100)
+                {
+                    break;
+                }
+                page++;
+            }
+
+            return new Result<int>(true, null, recentCommits);
+
+        }
+
     }
 
     public class HtmlData
@@ -111,7 +141,6 @@ namespace DevMeter.Core.Processing
             Commits = commits;
             Contributors = contributors;
         }
-
     }
 
 }

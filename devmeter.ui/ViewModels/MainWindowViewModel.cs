@@ -118,38 +118,25 @@ namespace DevMeter.UI.ViewModels
             }
 
             //commits in last 30 days
-            int page = 1;
-            int recentCommits = 0;
-            while (true)
+            var recentCommitsData = await dataCollector.GetRecentCommitsData();
+            if (!recentCommitsData.Succeeded || recentCommitsData == null)
             {
-                var recentCommitsResponse = await _gitHubClient.GetCommits(repoHandle, page, 30, 100);
-                if (!recentCommitsResponse.Succeeded || string.IsNullOrEmpty(recentCommitsResponse.SerializedData))
-                {
-                    ErrorMessage = HandleError(recentCommitsResponse);
-                    return;
-                }
-
-                var deserializedRecentCommits = JsonSerializer.Deserialize<List<GitHubCommit>>(recentCommitsResponse.SerializedData);
-                if (deserializedRecentCommits == null)
-                {
-                    break;
-                }
-                recentCommits += deserializedRecentCommits.Count;
-                if (deserializedRecentCommits.Count < 100)
-                {
-                    break;
-                }
-                page++;
+                if (recentCommitsData == null)
+                    ErrorMessage = Errors.Unexpected;
+                else
+                    ErrorMessage = recentCommitsData.ErrorMessage;
+                return;
             }
-            repoAssembler.UpdateCommitsInLast30Days(recentCommits);
+            var recentCommits = recentCommitsData.Value;
+
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             var repo = repoAssembler.GetRepo();
             RepoName = repoHandle.Substring(1);
             TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
-            TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{repo.CommitsInLast30Days:n0}")} in the last 30 days";
+            TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
-            TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(repo.Commits, repo.Contributors)}";
+            TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(unpackedHtmlData.Commits, unpackedHtmlData.Contributors)}";
             TopContributorsViewModel.Update(unpackedTopContributorsData);
 
             ErrorMessage = string.Empty;
