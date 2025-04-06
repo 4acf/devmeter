@@ -53,6 +53,7 @@ namespace DevMeter.Core.Processing
 
         public string ExtractContributorsFromHtml()
         {
+
             var spans = _htmlDocument.DocumentNode.Descendants("span")
                 .Where(span => span.GetAttributeValue("class", "").Contains("Counter ml-1"))
                 .ToList();
@@ -65,6 +66,29 @@ namespace DevMeter.Core.Processing
 
             return string.Empty;
             
+        }
+
+        public FileData? ExtractLineCountFromHtml()
+        {
+            var locSpan = _htmlDocument.DocumentNode.Descendants("span")
+                .Where(span => span.InnerText.Contains("lines") && span.InnerText.Contains("loc"))
+                .FirstOrDefault();
+
+            if (locSpan == null)
+            {
+                return null;
+            }
+                
+            var innerText = locSpan.InnerText;
+            var tokens = innerText.Split(' ', '(');
+
+            if (!Int32.TryParse(tokens[0], out int linesOfCode) || !Int32.TryParse(tokens[3], out int sourceLinesOfCode))
+            {
+                return null;
+            }
+
+            return new FileData(sourceLinesOfCode, linesOfCode - sourceLinesOfCode);
+
         }
 
     }

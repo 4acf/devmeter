@@ -89,5 +89,33 @@ namespace DevMeter.Core.Github
             }
         }
 
+        public async Task<GitHubApiResponse> GetRootFolderContents(string repoHandle)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_baseApiUrl}repos{repoHandle}/contents");
+                var json = await response.Content.ReadAsStringAsync();
+                return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
+            }
+            catch (HttpRequestException e)
+            {
+                return new GitHubApiResponse(false, e.Message, null);
+            }
+        }
+
+        public async Task<GitHubApiResponse> GetFolderContents(string url)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                var json = await response.Content.ReadAsStringAsync();
+                return new GitHubApiResponse(response.IsSuccessStatusCode, null, json);
+            }
+            catch (HttpRequestException e)
+            {
+                return new GitHubApiResponse(false, e.Message, null);
+            }
+        }
+
     }
 }

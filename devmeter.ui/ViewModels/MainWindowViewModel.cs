@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
 using DevMeter.Core.Utils;
+using Avalonia.Remote.Protocol;
 
 namespace DevMeter.UI.ViewModels
 {
@@ -129,6 +130,10 @@ namespace DevMeter.UI.ViewModels
             }
             var recentCommits = recentCommitsData.Value;
 
+            //reading file tree (slow!)
+            var fileTreeData = await dataCollector.GetRootFolderContents();
+
+            //interpreting data from file tree
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             var repo = repoAssembler.GetRepo();

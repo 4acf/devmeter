@@ -8,6 +8,10 @@ namespace DevMeter.Core.Utils
 {
     public static class Filetypes
     {
+
+        public const string Dir = "dir";
+        public const string File = "file";
+
         //courtesy of github.com/ozh/github-colors
         public static readonly Dictionary<string, string> Colors = new()
         {

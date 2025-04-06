@@ -4,7 +4,9 @@ using DevMeter.Core.Models;
 using DevMeter.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -129,6 +131,218 @@ namespace DevMeter.Core.Processing
 
         }
 
+        public async Task<Result<Folder>> GetRootFolderContents()
+        {
+            var rootFolderContentsResponse = await _gitHubClient.GetRootFolderContents(_repoHandle);
+            if(!rootFolderContentsResponse.Succeeded || string.IsNullOrEmpty(rootFolderContentsResponse.SerializedData))
+            {
+                var result = new Result<Folder>(false, HandleError(rootFolderContentsResponse), null);
+                return result;
+            }
+
+            var deserializedRootFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(rootFolderContentsResponse.SerializedData);
+            if(deserializedRootFolderContents == null)
+            {
+                var result = new Result<Folder>(false, Errors.CantReadRootFolderContents, null);
+                return result;
+            }
+
+            int linesOfCode = 0;
+            int linesOfWhitespace = 0;
+            var filesystemObjects = new List<FilesystemObject>();
+            foreach(var content in deserializedRootFolderContents)
+            {
+
+                if(content.Type == Filetypes.Dir)
+                {
+                    var subfolderData = await GetFolderContents(content);
+                    if (!subfolderData.Succeeded || subfolderData == null)
+                    {
+                        var result = new Result<Folder>(
+                            false,
+                            subfolderData == null ? Errors.Unexpected : subfolderData.ErrorMessage,
+                            null
+                        );
+                        return result;
+                    }
+
+                    var subfolder = subfolderData.Value;
+                    if (subfolder == null)
+                    {
+                        var result = new Result<Folder>(false, Errors.CantReadFolderContents, null);
+                        return result;
+                    }
+
+                    filesystemObjects.Add(subfolder);
+                    linesOfCode += subfolder.LinesOfCode;
+                    linesOfWhitespace += subfolder.LinesOfWhitespace;
+
+                }
+                else
+                {
+                    var fileData = await GetFile(content);
+                    if (!fileData.Succeeded || fileData == null)
+                    {
+                        var result = new Result<Folder>(
+                            false,
+                            fileData == null ? Errors.Unexpected : fileData.ErrorMessage,
+                            null
+                        );
+                        return result;
+                    }
+
+                    var file = fileData.Value;
+                    if (file == null)
+                    {
+                        var result = new Result<Folder>(false, Errors.CantReadFileContents, null);
+                        return result;
+                    }
+
+                    filesystemObjects.Add(file);
+                    linesOfCode += file.LinesOfCode;
+                    linesOfWhitespace += file.LinesOfWhitespace;
+
+                }
+
+            }
+
+            var folder = new Folder(
+                "root",
+                linesOfCode,
+                linesOfWhitespace,
+                filesystemObjects
+                );
+
+            return new Result<Folder>(true, null, folder);
+
+        }
+
+        private async Task<Result<Folder>> GetFolderContents(GitHubContents input)
+        {
+            var folderContentsResponse = await _gitHubClient.GetFolderContents(input.Url);
+            if (!folderContentsResponse.Succeeded || string.IsNullOrEmpty(folderContentsResponse.SerializedData))
+            {
+                var result = new Result<Folder>(false, HandleError(folderContentsResponse), null);
+                return result;
+            }
+
+            var deserializedFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(folderContentsResponse.SerializedData);
+            if (deserializedFolderContents == null)
+            {
+                var result = new Result<Folder>(false, Errors.CantReadRootFolderContents, null);
+                return result;
+            }
+
+            int linesOfCode = 0;
+            int linesOfWhitespace = 0;
+            var filesystemObjects = new List<FilesystemObject>();
+            foreach (var content in deserializedFolderContents)
+            {
+
+                if (content.Type == Filetypes.Dir)
+                {
+                    var subfolderData = await GetFolderContents(content);
+                    if (!subfolderData.Succeeded || subfolderData == null)
+                    {
+                        var result = new Result<Folder>(
+                            false,
+                            subfolderData == null ? Errors.Unexpected : subfolderData.ErrorMessage,
+                            null
+                            );
+                        return result;
+                    }
+
+                    var subfolder = subfolderData.Value;
+                    if (subfolder == null)
+                    {
+                        var result = new Result<Folder>(false, Errors.CantReadFolderContents, null);
+                        return result;
+                    }
+
+                    filesystemObjects.Add(subfolder);
+                    linesOfCode += subfolder.LinesOfCode;
+                    linesOfWhitespace += subfolder.LinesOfWhitespace;
+
+                }
+                else
+                {
+                    var fileData = await GetFile(content);
+                    if (!fileData.Succeeded || fileData == null)
+                    {
+                        var result = new Result<Folder>(
+                            false,
+                            fileData == null ? Errors.Unexpected : fileData.ErrorMessage,
+                            null
+                            );
+                        return result;
+                    }
+
+                    var file = fileData.Value;
+                    if (file == null)
+                    {
+                        var result = new Result<Folder>(false, Errors.CantReadFileContents, null);
+                        return result;
+                    }
+
+                    filesystemObjects.Add(file);
+                    linesOfCode += file.LinesOfCode;
+                    linesOfWhitespace += file.LinesOfWhitespace;
+
+                }
+
+            }
+
+            var folder = new Folder(
+                input.Name,
+                linesOfCode,
+                linesOfWhitespace,
+                filesystemObjects
+                );
+
+            return new Result<Folder>(true, null, folder);
+        }
+
+        private async Task<Result<Models.File>> GetFile(GitHubContents content)
+        {
+
+            if(content.Type == Filetypes.Dir)
+            {
+                return new Result<Models.File>(false, Errors.IncorrectType, null);
+            }
+
+            var fileHtmlResponse = await _gitHubClient.GetPageHtml(content.HtmlUrl);
+            if (!fileHtmlResponse.Succeeded || string.IsNullOrEmpty(fileHtmlResponse.HtmlData))
+            {
+                var result = new Result<Models.File>(false, HandleError(fileHtmlResponse), null);
+                return result;
+            }
+
+            var htmlDocumentParser = new HtmlDocumentParser(fileHtmlResponse.HtmlData);
+
+            var fileData = htmlDocumentParser.ExtractLineCountFromHtml();
+            if (fileData == null)
+            {
+                //special case, not being able to parse the html for line count does not warrant a crash
+                var blankFile = new Models.File(
+                    content.Name,
+                    0,
+                    0,
+                    content.Name
+                    );
+                var result = new Result<Models.File>(true, null, blankFile);
+                return result;
+            }
+
+            var file = new Models.File(
+                content.Name,
+                fileData.LinesOfCode, 
+                fileData.LinesOfWhitespace,
+                content.Name //todo: logic for determining filetype
+                );
+            return new Result<Models.File>(true, null, file);
+
+        }
+
     }
 
     public class HtmlData
@@ -142,5 +356,18 @@ namespace DevMeter.Core.Processing
             Contributors = contributors;
         }
     }
+
+    public class FileData 
+    {
+        public int LinesOfCode { get; }
+        public int LinesOfWhitespace { get; }
+
+        public FileData(int linesOfCode, int linesOfWhitespace)
+        {
+            LinesOfCode = linesOfCode;
+            LinesOfWhitespace = linesOfWhitespace;
+        }
+    }
+
 
 }

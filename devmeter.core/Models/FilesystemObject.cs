@@ -8,8 +8,16 @@ namespace DevMeter.Core.Models
 {
     public abstract class FilesystemObject
     {
-        string Name { get; set; } = string.Empty;
-        int LinesOfCode { get; set; }
-        int LinesOfWhitespace { get; set; }
+        public string Name { get; }
+        public int LinesOfCode { get; }
+        public int LinesOfWhitespace { get; }
+
+        protected FilesystemObject(string name, int linesOfCode, int linesOfWhitespace)
+        {
+            Name = name;
+            LinesOfCode = linesOfCode;
+            LinesOfWhitespace = linesOfWhitespace;
+        }
+
     }
 }

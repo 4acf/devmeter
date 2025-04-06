@@ -8,6 +8,13 @@ namespace DevMeter.Core.Models
 {
     public class Folder : FilesystemObject
     {
-        public List<FilesystemObject> FilesystemObjects { get; set; } = [];
+        public List<FilesystemObject> FilesystemObjects { get; }
+
+        public Folder(string name, int linesOfCode, int linesOfWhitespace, List<FilesystemObject> filesystemObjects) 
+            : base(name, linesOfCode, linesOfWhitespace)
+        {
+            FilesystemObjects = filesystemObjects;
+        }
+
     }
 }
