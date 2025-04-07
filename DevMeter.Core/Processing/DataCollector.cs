@@ -131,6 +131,19 @@ namespace DevMeter.Core.Processing
 
         }
 
+        public async Task<Result<Dictionary<string, long>>> GetLinguistData()
+        {
+            var languagesResponse = await _gitHubClient.GetLanguages(_repoHandle);
+            if(!languagesResponse.Succeeded || string.IsNullOrEmpty(languagesResponse.SerializedData))
+            {
+                var result = new Result<Dictionary<string, long>>(false, HandleError(languagesResponse), null);
+                return result;
+            }
+
+            var deserializedLanguagesResponse = JsonSerializer.Deserialize<Dictionary<string, long>>(languagesResponse.SerializedData);
+            return new Result<Dictionary<string, long>>(true, null, deserializedLanguagesResponse);
+        }
+
         public async Task<Result<Folder>> GetRootFolderContents()
         {
             var rootFolderContentsResponse = await _gitHubClient.GetRootFolderContents(_repoHandle);

@@ -131,6 +131,23 @@ namespace DevMeter.UI.ViewModels
             }
             var recentCommits = recentCommitsData.Value;
 
+            //get data from linguist for language breakdown
+            var linguistData = await dataCollector.GetLinguistData();
+            if (!linguistData.Succeeded || linguistData == null)
+            {
+                if (linguistData == null)
+                    ErrorMessage = Errors.Unexpected;
+                else
+                    ErrorMessage = linguistData.ErrorMessage;
+                return;
+            }
+            var unpackedLanguages = linguistData.Value;
+            if (unpackedLanguages == null)
+            {
+                ErrorMessage = Errors.Unexpected;
+                return;
+            }
+
             //reading file tree (slow!)
             var fileTreeData = await dataCollector.GetRootFolderContents();
             if (!fileTreeData.Succeeded || fileTreeData == null)
@@ -148,7 +165,7 @@ namespace DevMeter.UI.ViewModels
                 return;
             }
 
-            //interpreting data from file tree
+            //interpreting data from file tree (less clutter at the cost of one extra tree traversal)
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             RepoName = repoHandle.Substring(1);
@@ -158,6 +175,7 @@ namespace DevMeter.UI.ViewModels
             TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(unpackedHtmlData.Commits, unpackedHtmlData.Contributors)}";
+            LanguageBreakdownViewModel.Update(unpackedLanguages);
             TopContributorsViewModel.Update(unpackedTopContributorsData);
 
             ErrorMessage = string.Empty;
