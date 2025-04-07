@@ -19,6 +19,7 @@ namespace DevMeter.Core.Processing
         private GitHubClient _gitHubClient;
         private string _repoHandle;
         private const int _topContributorsSize = 7;
+        private const int _numberOfLargestFiles = 10;
 
         public DataCollector(GitHubClient gitHubClient, string repoHandle)
         {
@@ -354,6 +355,29 @@ namespace DevMeter.Core.Processing
                 );
             return new Result<Models.File>(true, null, file);
 
+        }
+
+        public void GetLargestFiles(Folder folder, PriorityQueue<Models.File, int> priorityQueue)
+        {
+
+            foreach(var filesystemObject in folder.FilesystemObjects)
+            {
+                if(filesystemObject is Models.File file)
+                {
+                    if(file.LinesOfCode > 0)
+                    {
+                        priorityQueue.Enqueue(file, file.LinesOfCode);
+                    }
+                    while(priorityQueue.Count > _numberOfLargestFiles)
+                    {
+                        priorityQueue.Dequeue();
+                    }
+                }
+                else if(filesystemObject is Folder subfolder)
+                {
+                    GetLargestFiles(subfolder, priorityQueue);
+                }
+            }
         }
 
     }

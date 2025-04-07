@@ -165,7 +165,9 @@ namespace DevMeter.UI.ViewModels
                 return;
             }
 
-            //interpreting data from file tree (less clutter at the cost of one extra tree traversal)
+            //traverse tree to get largest files
+            var largestFilesByLinesPq = new PriorityQueue<File, int>();
+            dataCollector.GetLargestFiles(unpackedFileTree, largestFilesByLinesPq);
 
             //update ui (todo: define all rules for formatting this data in stringformatting class)
             RepoName = repoHandle.Substring(1);
@@ -176,6 +178,7 @@ namespace DevMeter.UI.ViewModels
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(unpackedHtmlData.Commits, unpackedHtmlData.Contributors)}";
             LanguageBreakdownViewModel.Update(unpackedLanguages);
+            LargestFilesViewModel.Update(largestFilesByLinesPq);
             TopContributorsViewModel.Update(unpackedTopContributorsData);
 
             ErrorMessage = string.Empty;

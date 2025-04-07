@@ -13,7 +13,7 @@
 	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
 		<Grid RowDefinitions="Auto, *" Width="550" Height="250" Margin="25">
 			<TextBlock Grid.Row="0" Classes="h3gray" Text="Largest Files" Margin="3 0 0 10"></TextBlock>
-			<lvc:CartesianChart Grid.Row="1"></lvc:CartesianChart>
+			<lvc:CartesianChart Grid.Row="1" Series="{Binding Series}" IsVisible="{Binding IsVisible}" XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" FindingStrategy="{Binding ToolTipFindingStrategy}"></lvc:CartesianChart>
 		</Grid>
 	</Border>
 
