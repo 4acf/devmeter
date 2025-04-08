@@ -25,7 +25,10 @@ namespace DevMeter.UI.ViewModels
         private string? _searchString;
 
         [ObservableProperty]
-        private string? _errorMessage;
+        private string? _statusMessage;
+
+        [ObservableProperty]
+        private string _statusColor;
 
         [ObservableProperty]
         private string _repoName;
@@ -42,6 +45,7 @@ namespace DevMeter.UI.ViewModels
 
         public MainWindowViewModel()
         {
+            StatusColor = Colors.Status;
             RepoName = "-";
             _gitHubClient = new GitHubClient(App.Configuration?["PAT"]);
             TotalLinesViewModel = new TotalLinesViewModel();
@@ -57,9 +61,12 @@ namespace DevMeter.UI.ViewModels
         private async Task Search()
         {
 
+            StatusColor = Colors.Status;
+
             if (!InputParser.TryParse(SearchString, out var result))
             {
-                ErrorMessage = result;
+                StatusMessage = result;
+                StatusColor = Colors.Error;
                 return;
             }
             var repoHandle = result;
@@ -70,93 +77,111 @@ namespace DevMeter.UI.ViewModels
             var dataCollector = new DataCollector(_gitHubClient, repoHandle);
 
             //get number of commits + number of contributors
+            StatusMessage = "Fetching HTML data...";
             var htmlData = await dataCollector.GetHtmlData();
             if (!htmlData.Succeeded || htmlData == null)
             {
                 if (htmlData == null)
-                    ErrorMessage = Errors.Unexpected;
+                    StatusMessage = Errors.Unexpected;
                 else
-                    ErrorMessage = htmlData.ErrorMessage;
+                    StatusMessage = htmlData.ErrorMessage;
+                StatusColor = Colors.Error;
                 return;
             }
             var unpackedHtmlData = htmlData.Value;
             if (unpackedHtmlData == null)
             {
-                ErrorMessage = Errors.Unexpected;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
                 return;
             }
 
             //get handles of the top contributors
+            StatusMessage = "Fetching top contributors...";
             var topContributorData = await dataCollector.GetTopContributorData();
             if (!topContributorData.Succeeded || topContributorData == null)
             {
                 if (topContributorData == null)
-                    ErrorMessage = Errors.Unexpected;
+                    StatusMessage = Errors.Unexpected;
                 else
-                    ErrorMessage = topContributorData.ErrorMessage;
+                    StatusMessage = topContributorData.ErrorMessage;
+                StatusColor = Colors.Error;
                 return;
             }
             var unpackedTopContributorsData = topContributorData.Value;
             if(unpackedTopContributorsData == null)
             {
-                ErrorMessage = Errors.Unexpected;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
                 return;
             }
 
             //commits in last 30 days
+            StatusMessage = "Fetching commits in last 30 days...";
             var recentCommitsData = await dataCollector.GetRecentCommitsData();
             if (!recentCommitsData.Succeeded || recentCommitsData == null)
             {
                 if (recentCommitsData == null)
-                    ErrorMessage = Errors.Unexpected;
+                    StatusMessage = Errors.Unexpected;
                 else
-                    ErrorMessage = recentCommitsData.ErrorMessage;
+                    StatusMessage = recentCommitsData.ErrorMessage;
+                StatusColor = Colors.Error;
                 return;
             }
             var unpackedRecentCommits = recentCommitsData.Value;
             if (unpackedRecentCommits == null)
             {
-                ErrorMessage = Errors.Unexpected;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
                 return;
             }
 
             //get data from linguist for language breakdown
+            StatusMessage = "Fetching language data...";
             var linguistData = await dataCollector.GetLinguistData();
             if (!linguistData.Succeeded || linguistData == null)
             {
                 if (linguistData == null)
-                    ErrorMessage = Errors.Unexpected;
+                    StatusMessage = Errors.Unexpected;
                 else
-                    ErrorMessage = linguistData.ErrorMessage;
+                    StatusMessage = linguistData.ErrorMessage;
+                StatusColor = Colors.Error;
                 return;
             }
             var unpackedLanguages = linguistData.Value;
             if (unpackedLanguages == null)
             {
-                ErrorMessage = Errors.Unexpected;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
                 return;
             }
 
             //reading file tree (slow!)
+            StatusMessage = "Reading file tree... (this may take a while)";
             var fileTreeData = await dataCollector.GetRootFolderContents();
             if (!fileTreeData.Succeeded || fileTreeData == null)
             {
                 if (fileTreeData == null)
-                    ErrorMessage = Errors.Unexpected;
+                    StatusMessage = Errors.Unexpected;
                 else
-                    ErrorMessage = fileTreeData.ErrorMessage;
+                    StatusMessage = fileTreeData.ErrorMessage;
+                StatusColor = Colors.Error;
                 return;
             }
             var unpackedFileTree = fileTreeData.Value;
             if (unpackedFileTree == null)
             {
-                ErrorMessage = Errors.Unexpected;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
                 return;
             }
 
             //traverse tree to get largest files
+            StatusMessage = "Analyzing file sizes";
             var largestFilesByLinesPq = new PriorityQueue<File, int>();
             dataCollector.GetLargestFiles(unpackedFileTree, largestFilesByLinesPq);
+
+            StatusMessage = string.Empty;
 
             //batch update ui
             RepoName = repoHandle.Substring(1);
@@ -167,8 +192,6 @@ namespace DevMeter.UI.ViewModels
             RecentActivityViewModel.Update(unpackedRecentCommits);
             LargestFilesViewModel.Update(largestFilesByLinesPq);
             TopContributorsViewModel.Update(unpackedTopContributorsData);
-
-            ErrorMessage = string.Empty;
 
         }
 
