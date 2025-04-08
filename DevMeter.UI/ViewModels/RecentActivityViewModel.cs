@@ -15,7 +15,7 @@ using SkiaSharp;
 
 namespace DevMeter.UI.ViewModels
 {
-    public partial class RecentActivityViewModel : ViewModelBase
+    internal partial class RecentActivityViewModel : ViewModelBase
     {
 
         [ObservableProperty]

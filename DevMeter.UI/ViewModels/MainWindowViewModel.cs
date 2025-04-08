@@ -35,13 +35,13 @@ namespace DevMeter.UI.ViewModels
 
         private readonly GitHubClient _gitHubClient;
 
-        public TotalLinesViewModel TotalLinesViewModel { get; }
-        public TotalCommitsViewModel TotalCommitsViewModel { get; }
-        public TotalContributorsViewModel TotalContributorsViewModel { get; }
-        public LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
-        public RecentActivityViewModel RecentActivityViewModel { get; }
-        public LargestFilesViewModel LargestFilesViewModel { get; }
-        public TopContributorsViewModel TopContributorsViewModel { get; }
+        internal TotalLinesViewModel TotalLinesViewModel { get; }
+        internal TotalCommitsViewModel TotalCommitsViewModel { get; }
+        internal TotalContributorsViewModel TotalContributorsViewModel { get; }
+        internal LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
+        internal RecentActivityViewModel RecentActivityViewModel { get; }
+        internal LargestFilesViewModel LargestFilesViewModel { get; }
+        internal TopContributorsViewModel TopContributorsViewModel { get; }
 
         public MainWindowViewModel()
         {

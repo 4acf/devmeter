@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevMeter.UI.ViewModels
 {
-    public partial class TopContributorsViewModel : ViewModelBase
+    internal partial class TopContributorsViewModel : ViewModelBase
     {
 
         //TODO: REFACTOR TO AN ARRAY

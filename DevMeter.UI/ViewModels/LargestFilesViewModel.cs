@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace DevMeter.UI.ViewModels
 {
-    public partial class LargestFilesViewModel : ViewModelBase
+    internal partial class LargestFilesViewModel : ViewModelBase
     {
 
         [ObservableProperty]

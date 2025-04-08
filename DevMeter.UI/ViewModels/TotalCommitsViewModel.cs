@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DevMeter.UI.ViewModels
 {
-    public partial class TotalCommitsViewModel : ViewModelBase
+    internal partial class TotalCommitsViewModel : ViewModelBase
     {
 
         [ObservableProperty]

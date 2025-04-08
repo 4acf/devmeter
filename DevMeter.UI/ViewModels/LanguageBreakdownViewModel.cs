@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace DevMeter.UI.ViewModels
 {
-    public partial class LanguageBreakdownViewModel : ViewModelBase
+    internal partial class LanguageBreakdownViewModel : ViewModelBase
     {
 
         [ObservableProperty]
