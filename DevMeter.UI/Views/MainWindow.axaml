@@ -13,7 +13,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="devmeter"
 		TransparencyLevelHint="AcrylicBlur"
-		Background="Transparent"
+		Background="#17181a"
 		ExtendClientAreaToDecorationsHint="true">
 
     <Design.DataContext>
@@ -23,16 +23,6 @@
     </Design.DataContext>
 	
 	<Panel>
-		<ExperimentalAcrylicBorder IsHitTestVisible="False">
-			<ExperimentalAcrylicBorder.Material>
-				<ExperimentalAcrylicMaterial
-					BackgroundSource="Digger"
-					TintColor="Black"
-					TintOpacity="1"
-					MaterialOpacity="0.01" />
-			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>
-
 		<Grid RowDefinitions="Auto, Auto, *" Margin="66">
 			<Grid Grid.Row="0" ColumnDefinitions="Auto, *">
 				<TextBlock Grid.Column="0" Classes="h1" Text="{Binding RepoName}"></TextBlock>
@@ -81,7 +71,6 @@
 				</Grid>
 			</Grid>
 		</Grid>
-		
 	</Panel>
 
 </Window>
