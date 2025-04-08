@@ -56,7 +56,8 @@ namespace DevMeter.UI.ViewModels
                         Name = kvp.Key,
                         Values = [new ObservableValue(((float)kvp.Value / (float)total) * 100)],
                         Fill = new SolidColorPaint(color),
-                        MaxRadialColumnWidth = 50
+                        MaxRadialColumnWidth = 50,
+                        ToolTipLabelFormatter = (point) => $"{$"{(point?.StackedValue?.Share * 100):F2}%"}"
                     }
                 );
             }
