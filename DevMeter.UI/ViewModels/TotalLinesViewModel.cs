@@ -20,8 +20,8 @@ namespace DevMeter.UI.ViewModels
 
         public TotalLinesViewModel()
         {
-            TotalLines = "-";
-            TotalLinesExcludingWhitespace = "-";
+            TotalLines = string.Empty;
+            TotalLinesExcludingWhitespace = string.Empty;
         }
 
         public void Update(int linesOfCode, int linesOfWhitespace)

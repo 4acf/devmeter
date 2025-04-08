@@ -20,8 +20,8 @@ namespace DevMeter.UI.ViewModels
 
         public TotalContributorsViewModel()
         {
-            _totalContributors = "-";
-            _averageContributions = "-";
+            _totalContributors = string.Empty;
+            _averageContributions = string.Empty;
         }
 
         public void Update(HtmlData htmlData)

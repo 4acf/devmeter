@@ -20,8 +20,8 @@ namespace DevMeter.UI.ViewModels
 
         public TotalCommitsViewModel()
         {
-            TotalCommits = "-";
-            CommitsInLast30Days = "-";
+            TotalCommits = string.Empty;
+            CommitsInLast30Days = string.Empty;
         }
 
         public void Update(string totalCommits, int recentCommits)

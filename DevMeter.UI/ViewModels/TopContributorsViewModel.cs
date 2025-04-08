@@ -44,20 +44,20 @@ namespace DevMeter.UI.ViewModels
 
         public TopContributorsViewModel()
         {
-            Row0Col0 = "-";
-            Row0Col1 = "-";
-            Row1Col0 = "-";
-            Row1Col1 = "-";
-            Row2Col0 = "-";
-            Row2Col1 = "-";
-            Row3Col0 = "-";
-            Row3Col1 = "-";
-            Row4Col0 = "-";
-            Row4Col1 = "-";
-            Row5Col0 = "-";
-            Row5Col1 = "-";
-            Row6Col0 = "-";
-            Row6Col1 = "-";
+            Row0Col0 = string.Empty;
+            Row0Col1 = string.Empty;
+            Row1Col0 = string.Empty;
+            Row1Col1 = string.Empty;
+            Row2Col0 = string.Empty;
+            Row2Col1 = string.Empty;
+            Row3Col0 = string.Empty;
+            Row3Col1 = string.Empty;
+            Row4Col0 = string.Empty;
+            Row4Col1 = string.Empty;
+            Row5Col0 = string.Empty;
+            Row5Col1 = string.Empty;
+            Row6Col0 = string.Empty;
+            Row6Col1 = string.Empty;
         }
 
         public void Update(List<Contributor> topContributors)
