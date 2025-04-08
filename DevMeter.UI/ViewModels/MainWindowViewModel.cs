@@ -158,14 +158,11 @@ namespace DevMeter.UI.ViewModels
             var largestFilesByLinesPq = new PriorityQueue<File, int>();
             dataCollector.GetLargestFiles(unpackedFileTree, largestFilesByLinesPq);
 
-            //update ui (todo: define all rules for formatting this data in stringformatting class)
+            //batch update ui
             RepoName = repoHandle.Substring(1);
-            TotalLinesViewModel.TotalLines = $"{String.Format($"{unpackedFileTree.LinesOfCode + unpackedFileTree.LinesOfWhitespace:n0}")}";
-            TotalLinesViewModel.TotalLinesExcludingWhitespace = $"Excluding Whitespace: {String.Format($"{unpackedFileTree.LinesOfCode:n0}")}";
-            TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
-            TotalCommitsViewModel.Update(unpackedRecentCommits.Count);
-            TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
-            TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(unpackedHtmlData.Commits, unpackedHtmlData.Contributors)}";
+            TotalLinesViewModel.Update(unpackedFileTree.LinesOfCode, unpackedFileTree.LinesOfWhitespace);
+            TotalCommitsViewModel.Update(unpackedHtmlData.Commits, unpackedRecentCommits.Count);
+            TotalContributorsViewModel.Update(unpackedHtmlData);
             LanguageBreakdownViewModel.Update(unpackedLanguages);
             RecentActivityViewModel.Update(unpackedRecentCommits);
             LargestFilesViewModel.Update(largestFilesByLinesPq);

@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevMeter.Core.Processing;
+using DevMeter.Core.Processing.Formatting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,12 @@ namespace DevMeter.UI.ViewModels
         {
             _totalContributors = "-";
             _averageContributions = "-";
+        }
+
+        public void Update(HtmlData htmlData)
+        {
+            TotalContributors = htmlData.Contributors;
+            AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(htmlData.Commits, htmlData.Contributors)}";
         }
 
     }

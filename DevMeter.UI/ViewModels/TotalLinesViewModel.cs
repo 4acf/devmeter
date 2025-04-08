@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevMeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,12 @@ namespace DevMeter.UI.ViewModels
         {
             TotalLines = "-";
             TotalLinesExcludingWhitespace = "-";
+        }
+
+        public void Update(int linesOfCode, int linesOfWhitespace)
+        {
+            TotalLines = $"{String.Format($"{linesOfCode + linesOfWhitespace:n0}")}";
+            TotalLinesExcludingWhitespace = $"Excluding Whitespace: {String.Format($"{linesOfCode:n0}")}";
         }
 
     }

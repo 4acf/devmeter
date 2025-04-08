@@ -23,8 +23,9 @@ namespace DevMeter.UI.ViewModels
             CommitsInLast30Days = "-";
         }
 
-        public void Update(int recentCommits)
+        public void Update(string totalCommits, int recentCommits)
         {
+            TotalCommits = totalCommits;
             CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
         }
 
