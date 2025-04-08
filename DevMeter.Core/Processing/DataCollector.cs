@@ -34,6 +34,10 @@ namespace DevMeter.Core.Processing
             {
                 errorMessage = JsonSerializer.Deserialize<GitHubApiError>(response.SerializedData)?.Message;
             }
+            if(errorMessage != null && errorMessage.ToLower().Contains("rate limit")) 
+            {
+                errorMessage = "Rate limit reached";
+            }
             return errorMessage ?? Errors.Unexpected;
         }
 
