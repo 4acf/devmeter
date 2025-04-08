@@ -75,6 +75,7 @@ namespace DevMeter.Core.Utils
             "psd",
             "readme",
             "license",
+            "sln",
         };
 
         //courtesy of github.com/ozh/github-colors
