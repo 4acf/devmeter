@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DevMeter.Core.Github.Models;
+using DevMeter.Core.Processing.Formatting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace DevMeter.UI.ViewModels
         public void Update(string totalCommits, int recentCommits)
         {
             TotalCommits = totalCommits;
-            CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
+            CommitsInLast30Days = $"+{StringFormatting.CommaString(recentCommits)} in the last 30 days";
         }
 
     }

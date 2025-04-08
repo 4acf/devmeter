@@ -9,6 +9,12 @@ namespace DevMeter.Core.Processing.Formatting
     public static class StringFormatting
     {
 
+        public static string CommaString(int x)
+        {
+            //this function exists because i find calling it much more readable than seeing this everywhere
+            return String.Format($"{x:n0}");
+        }
+
         public static string DivideStrings(string dividendString, string divisorString)
         {
 
