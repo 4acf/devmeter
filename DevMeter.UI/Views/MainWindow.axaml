@@ -68,7 +68,7 @@
 						<components:LanguageBreakdownView DataContext="{Binding LanguageBreakdownViewModel}"></components:LanguageBreakdownView>
 					</Border>
 					<Border Grid.Column="1" CornerRadius="10" Width="580" Height="299" BoxShadow="5 5 10 0 #111111" HorizontalAlignment="Right">
-						<components:FilesOverTimeView DataContext="{Binding FilesOverTimeViewModel}"></components:FilesOverTimeView>
+						<components:RecentActivityView DataContext="{Binding RecentActivityViewModel}"></components:RecentActivityView>
 					</Border>
 				</Grid>
 				<Grid Grid.Row="2" ColumnDefinitions="1.5*, *">

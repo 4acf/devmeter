@@ -36,7 +36,7 @@ namespace DevMeter.UI.ViewModels
         public TotalCommitsViewModel TotalCommitsViewModel { get; }
         public TotalContributorsViewModel TotalContributorsViewModel { get; }
         public LanguageBreakdownViewModel LanguageBreakdownViewModel { get; }
-        public FilesOverTimeViewModel FilesOverTimeViewModel { get; }
+        public RecentActivityViewModel RecentActivityViewModel { get; }
         public LargestFilesViewModel LargestFilesViewModel { get; }
         public TopContributorsViewModel TopContributorsViewModel { get; }
 
@@ -48,7 +48,7 @@ namespace DevMeter.UI.ViewModels
             TotalCommitsViewModel = new TotalCommitsViewModel();
             TotalContributorsViewModel = new TotalContributorsViewModel();
             LanguageBreakdownViewModel = new LanguageBreakdownViewModel();
-            FilesOverTimeViewModel = new FilesOverTimeViewModel();
+            RecentActivityViewModel = new RecentActivityViewModel();
             LargestFilesViewModel = new LargestFilesViewModel();
             TopContributorsViewModel = new TopContributorsViewModel();
         }
@@ -129,7 +129,12 @@ namespace DevMeter.UI.ViewModels
                     ErrorMessage = recentCommitsData.ErrorMessage;
                 return;
             }
-            var recentCommits = recentCommitsData.Value;
+            var unpackedRecentCommits = recentCommitsData.Value;
+            if (unpackedRecentCommits == null)
+            {
+                ErrorMessage = Errors.Unexpected;
+                return;
+            }
 
             //get data from linguist for language breakdown
             var linguistData = await dataCollector.GetLinguistData();
@@ -174,10 +179,11 @@ namespace DevMeter.UI.ViewModels
             TotalLinesViewModel.TotalLines = $"{String.Format($"{unpackedFileTree.LinesOfCode + unpackedFileTree.LinesOfWhitespace:n0}")}";
             TotalLinesViewModel.TotalLinesExcludingWhitespace = $"Excluding Whitespace: {String.Format($"{unpackedFileTree.LinesOfCode:n0}")}";
             TotalCommitsViewModel.TotalCommits = unpackedHtmlData.Commits;
-            TotalCommitsViewModel.CommitsInLast30Days = $"+{String.Format($"{recentCommits:n0}")} in the last 30 days";
+            TotalCommitsViewModel.Update(unpackedRecentCommits.Count);
             TotalContributorsViewModel.TotalContributors = unpackedHtmlData.Contributors;
             TotalContributorsViewModel.AverageContributions = $"Average Contributions: {StringFormatting.DivideStrings(unpackedHtmlData.Commits, unpackedHtmlData.Contributors)}";
             LanguageBreakdownViewModel.Update(unpackedLanguages);
+            RecentActivityViewModel.Update(unpackedRecentCommits);
             LargestFilesViewModel.Update(largestFilesByLinesPq);
             TopContributorsViewModel.Update(unpackedTopContributorsData);
 

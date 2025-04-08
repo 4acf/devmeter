@@ -102,16 +102,18 @@ namespace DevMeter.Core.Processing
 
         }
 
-        public async Task<Result<int>> GetRecentCommitsData()
+        public async Task<Result<List<GitHubCommit>>> GetRecentCommitsData()
         {
+
+            var allRecentCommits = new List<GitHubCommit>();
+
             int page = 1;
-            int recentCommits = 0;
             while (true)
             {
                 var recentCommitsResponse = await _gitHubClient.GetCommits(_repoHandle, page, 30, 100);
                 if (!recentCommitsResponse.Succeeded || string.IsNullOrEmpty(recentCommitsResponse.SerializedData))
                 {
-                    var result = new Result<int>(false, HandleError(recentCommitsResponse), 0);
+                    var result = new Result<List<GitHubCommit>>(false, HandleError(recentCommitsResponse), null);
                     return result;
                 }
 
@@ -120,7 +122,7 @@ namespace DevMeter.Core.Processing
                 {
                     break;
                 }
-                recentCommits += deserializedRecentCommits.Count;
+                allRecentCommits.AddRange(deserializedRecentCommits);
                 if (deserializedRecentCommits.Count < 100)
                 {
                     break;
@@ -128,7 +130,7 @@ namespace DevMeter.Core.Processing
                 page++;
             }
 
-            return new Result<int>(true, null, recentCommits);
+            return new Result<List<GitHubCommit>>(true, null, allRecentCommits);
 
         }
 

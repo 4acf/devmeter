@@ -48,8 +48,8 @@
     <Compile Update="Views\Components\LargestFilesView.axaml.cs">
       <DependentUpon>LargestFilesView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Components\FilesOverTimeView.axaml.cs">
-      <DependentUpon>FilesOverTimeView.axaml</DependentUpon>
+    <Compile Update="Views\Components\RecentActivityView.axaml.cs">
+      <DependentUpon>RecentActivityView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Components\TotalLinesView.axaml.cs">
       <DependentUpon>TotalLinesView.axaml</DependentUpon>
