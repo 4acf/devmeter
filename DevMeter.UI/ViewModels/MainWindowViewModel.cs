@@ -53,22 +53,6 @@ namespace DevMeter.UI.ViewModels
             TopContributorsViewModel = new TopContributorsViewModel();
         }
 
-        private static string HandleError(GitHubApiResponse response)
-        {
-            var errorMessage = response.ErrorMessage;
-            if(errorMessage == null && !string.IsNullOrEmpty(response.SerializedData))
-            {
-                errorMessage = JsonSerializer.Deserialize<GitHubApiError>(response.SerializedData)?.Message;
-            }
-            return errorMessage ?? Errors.Unexpected;
-        }
-
-        private static string HandleError(GitHubHtmlResponse response)
-        {
-            var errorMessage = response.ErrorMessage ?? response.StatusCode.ToString();
-            return errorMessage ?? Errors.Unexpected;
-        }
-
         [RelayCommand]
         private async Task Search()
         {
