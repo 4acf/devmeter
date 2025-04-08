@@ -330,6 +330,19 @@ namespace DevMeter.Core.Processing
                 return new Result<Models.File>(false, Errors.IncorrectType, null);
             }
 
+            var extension = content.Name.Split('.')[^1].ToLower();
+            if(Filetypes.Ignore.Contains(extension) || Filetypes.Ignore.Contains(content.Name))
+            {
+                var blankFile = new Models.File(
+                    content.Name,
+                    0,
+                    0,
+                    extension
+                    );
+                var result = new Result<Models.File>(true, null, blankFile);
+                return result;
+            }
+
             var fileHtmlResponse = await _gitHubClient.GetPageHtml(content.HtmlUrl);
             if (!fileHtmlResponse.Succeeded || string.IsNullOrEmpty(fileHtmlResponse.HtmlData))
             {
@@ -347,7 +360,7 @@ namespace DevMeter.Core.Processing
                     content.Name,
                     0,
                     0,
-                    content.Name
+                    extension
                     );
                 var result = new Result<Models.File>(true, null, blankFile);
                 return result;
@@ -357,7 +370,7 @@ namespace DevMeter.Core.Processing
                 content.Name,
                 fileData.LinesOfCode, 
                 fileData.LinesOfWhitespace,
-                content.Name //todo: logic for determining filetype
+                extension
                 );
             return new Result<Models.File>(true, null, file);
 
