@@ -1,5 +1,5 @@
 <Window MinWidth="1080" MinHeight="975"
-		Width="1080" Height="975"
+		MaxWidth="1080" MaxHeight="975"
 	    xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DevMeter.UI.ViewModels"
