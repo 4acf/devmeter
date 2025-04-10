@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevMeter.Core.Github;
+using DevMeter.Core.Github.Models.Json;
 using DevMeter.Core.Models;
 using DevMeter.Core.Processing;
 using DevMeter.Core.Utils;
@@ -52,6 +53,37 @@ namespace DevMeter.UI.ViewModels
             TopContributorsViewModel = new TopContributorsViewModel();
         }
 
+        private bool DataCollectionFailed<T>(Result<T>? obj)
+        {
+            if(obj == null)
+            {
+                IsLoading = false;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
+                return true;
+            }
+            if (!obj.Succeeded)
+            {
+                IsLoading = false;
+                StatusMessage = obj.ErrorMessage;
+                StatusColor = Colors.Error;
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsResultValueNull<T>(T? obj) where T : class
+        {
+            if(obj == null)
+            {
+                IsLoading = false;
+                StatusMessage = Errors.Unexpected;
+                StatusColor = Colors.Error;
+                return true;
+            }
+            return false;
+        }
+
         [RelayCommand]
         private async Task Search()
         {
@@ -75,120 +107,85 @@ namespace DevMeter.UI.ViewModels
             //get number of commits + number of contributors
             StatusMessage = "Fetching HTML data...";
             var htmlDataResult = await dataCollector.GetHtmlData();
-            if (!htmlDataResult.Succeeded || htmlDataResult == null)
+            if (DataCollectionFailed<HtmlData>(htmlDataResult))
             {
-                if (htmlDataResult == null)
-                    StatusMessage = Errors.Unexpected;
-                else
-                    StatusMessage = htmlDataResult.ErrorMessage;
-                StatusColor = Colors.Error;
                 return;
             }
             var htmlData = htmlDataResult.Value;
-            if (htmlData == null)
+            if (IsResultValueNull<HtmlData>(htmlData))
             {
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
                 return;
             }
 
             //get handles of the top contributors
             StatusMessage = "Fetching top contributors...";
             var topContributorsResult = await dataCollector.GetTopContributorData();
-            if (!topContributorsResult.Succeeded || topContributorsResult == null)
+            if (DataCollectionFailed<List<Contributor>>(topContributorsResult))
             {
-                if (topContributorsResult == null)
-                    StatusMessage = Errors.Unexpected;
-                else
-                    StatusMessage = topContributorsResult.ErrorMessage;
-                StatusColor = Colors.Error;
                 return;
             }
             var topContributors = topContributorsResult.Value;
-            if (topContributors == null)
+            if (IsResultValueNull<List<Contributor>>(topContributors))
             {
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
                 return;
             }
 
             //commits in last 30 days
             StatusMessage = "Fetching commits in last 30 days...";
             var recentCommitsResult = await dataCollector.GetRecentCommitsData();
-            if (!recentCommitsResult.Succeeded || recentCommitsResult == null)
+            if (DataCollectionFailed<List<GitHubCommit>>(recentCommitsResult))
             {
-                if (recentCommitsResult == null)
-                    StatusMessage = Errors.Unexpected;
-                else
-                    StatusMessage = recentCommitsResult.ErrorMessage;
-                StatusColor = Colors.Error;
                 return;
             }
             var recentCommits = recentCommitsResult.Value;
-            if (recentCommits == null)
+            if (IsResultValueNull<List<GitHubCommit>>(recentCommits))
             {
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
                 return;
             }
 
             //get data from linguist for language breakdown
             StatusMessage = "Fetching language data...";
             var linguistResult = await dataCollector.GetLinguistData();
-            if (!linguistResult.Succeeded || linguistResult == null)
+            if (DataCollectionFailed<Dictionary<string, long>>(linguistResult))
             {
-                if (linguistResult == null)
-                    StatusMessage = Errors.Unexpected;
-                else
-                    StatusMessage = linguistResult.ErrorMessage;
-                StatusColor = Colors.Error;
                 return;
             }
             var languages = linguistResult.Value;
-            if (languages == null)
+            if (IsResultValueNull<Dictionary<string, long>>(languages))
             {
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
                 return;
             }
 
             //reading file tree (slow!)
             StatusMessage = "Reading file tree... (this may take a while)";
             var fileTreeResult = await dataCollector.GetRootFolderContents();
-            if (!fileTreeResult.Succeeded || fileTreeResult == null)
+            if (DataCollectionFailed<Folder>(fileTreeResult))
             {
-                if (fileTreeResult == null)
-                    StatusMessage = Errors.Unexpected;
-                else
-                    StatusMessage = fileTreeResult.ErrorMessage;
-                StatusColor = Colors.Error;
                 return;
             }
             var fileTree = fileTreeResult.Value;
-            if (fileTree == null)
+            if (IsResultValueNull<Folder>(fileTree))
             {
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
                 return;
             }
 
             //traverse tree to get largest files
             StatusMessage = "Analyzing file sizes";
             var largestFilesByLinesHeap = new PriorityQueue<File, int>();
-            dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
+            dataCollector.GetLargestFiles(fileTree!, largestFilesByLinesHeap);
 
             IsLoading = false;
             StatusMessage = string.Empty;
 
             //batch update ui
             RepoName = repoHandle.Substring(1);
-            TotalLinesViewModel.Update(fileTree.LinesOfCode, fileTree.LinesOfWhitespace);
-            TotalCommitsViewModel.Update(htmlData.Commits, recentCommits.Count);
-            TotalContributorsViewModel.Update(htmlData);
-            LanguageBreakdownViewModel.Update(languages);
-            RecentActivityViewModel.Update(recentCommits);
-            LargestFilesViewModel.Update(largestFilesByLinesHeap);
-            TopContributorsViewModel.Update(topContributors);
+            TotalLinesViewModel.Update(fileTree!.LinesOfCode, fileTree!.LinesOfWhitespace);
+            TotalCommitsViewModel.Update(htmlData!.Commits, recentCommits!.Count);
+            TotalContributorsViewModel.Update(htmlData!);
+            LanguageBreakdownViewModel.Update(languages!);
+            RecentActivityViewModel.Update(recentCommits!);
+            LargestFilesViewModel.Update(largestFilesByLinesHeap!);
+            TopContributorsViewModel.Update(topContributors!);
 
         }
 
