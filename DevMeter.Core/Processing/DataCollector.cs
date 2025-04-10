@@ -82,7 +82,7 @@ namespace DevMeter.Core.Processing
             var deserializedTopContributors = JsonSerializer.Deserialize<List<GitHubContributor>>(topContributorsResponse.SerializedData);
             if (deserializedTopContributors == null)
             {
-                var result = new Result<List<Contributor>>(false, Errors.CantReadTopContributors, null);
+                var result = new Result<List<Contributor>>(false, Errors.FailedToReadTopContributors, null);
                 return result;
             }
 
@@ -153,7 +153,7 @@ namespace DevMeter.Core.Processing
             var deserializedRootFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(rootFolderContentsResponse.SerializedData);
             if (deserializedRootFolderContents == null)
             {
-                var result = new Result<Folder>(false, Errors.CantReadRootFolderContents, null);
+                var result = new Result<Folder>(false, Errors.FailedToReadRootFolderContents, null);
                 return result;
             }
 
@@ -179,7 +179,7 @@ namespace DevMeter.Core.Processing
                     var subfolder = subfolderData.Value;
                     if (subfolder == null)
                     {
-                        var result = new Result<Folder>(false, Errors.CantReadFolderContents, null);
+                        var result = new Result<Folder>(false, Errors.FailedToReadFolderContents, null);
                         return result;
                     }
 
@@ -204,7 +204,7 @@ namespace DevMeter.Core.Processing
                     var file = fileData.Value;
                     if (file == null)
                     {
-                        var result = new Result<Folder>(false, Errors.CantReadFileContents, null);
+                        var result = new Result<Folder>(false, Errors.FailedToReadFileContents, null);
                         return result;
                     }
 
@@ -239,7 +239,7 @@ namespace DevMeter.Core.Processing
             var deserializedFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(folderContentsResponse.SerializedData);
             if (deserializedFolderContents == null)
             {
-                var result = new Result<Folder>(false, Errors.CantReadRootFolderContents, null);
+                var result = new Result<Folder>(false, Errors.FailedToReadRootFolderContents, null);
                 return result;
             }
 
@@ -265,7 +265,7 @@ namespace DevMeter.Core.Processing
                     var subfolder = subfolderData.Value;
                     if (subfolder == null)
                     {
-                        var result = new Result<Folder>(false, Errors.CantReadFolderContents, null);
+                        var result = new Result<Folder>(false, Errors.FailedToReadFolderContents, null);
                         return result;
                     }
 
@@ -290,7 +290,7 @@ namespace DevMeter.Core.Processing
                     var file = fileData.Value;
                     if (file == null)
                     {
-                        var result = new Result<Folder>(false, Errors.CantReadFileContents, null);
+                        var result = new Result<Folder>(false, Errors.FailedToReadFileContents, null);
                         return result;
                     }
 
