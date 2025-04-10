@@ -78,18 +78,18 @@ namespace DevMeter.UI.ViewModels
 
             //get number of commits + number of contributors
             StatusMessage = "Fetching HTML data...";
-            var htmlData = await dataCollector.GetHtmlData();
-            if (!htmlData.Succeeded || htmlData == null)
+            var htmlDataResult = await dataCollector.GetHtmlData();
+            if (!htmlDataResult.Succeeded || htmlDataResult == null)
             {
-                if (htmlData == null)
+                if (htmlDataResult == null)
                     StatusMessage = Errors.Unexpected;
                 else
-                    StatusMessage = htmlData.ErrorMessage;
+                    StatusMessage = htmlDataResult.ErrorMessage;
                 StatusColor = Colors.Error;
                 return;
             }
-            var unpackedHtmlData = htmlData.Value;
-            if (unpackedHtmlData == null)
+            var htmlData = htmlDataResult.Value;
+            if (htmlData == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;
@@ -98,18 +98,18 @@ namespace DevMeter.UI.ViewModels
 
             //get handles of the top contributors
             StatusMessage = "Fetching top contributors...";
-            var topContributorData = await dataCollector.GetTopContributorData();
-            if (!topContributorData.Succeeded || topContributorData == null)
+            var topContributorsResult = await dataCollector.GetTopContributorData();
+            if (!topContributorsResult.Succeeded || topContributorsResult == null)
             {
-                if (topContributorData == null)
+                if (topContributorsResult == null)
                     StatusMessage = Errors.Unexpected;
                 else
-                    StatusMessage = topContributorData.ErrorMessage;
+                    StatusMessage = topContributorsResult.ErrorMessage;
                 StatusColor = Colors.Error;
                 return;
             }
-            var unpackedTopContributorsData = topContributorData.Value;
-            if(unpackedTopContributorsData == null)
+            var topContributors = topContributorsResult.Value;
+            if(topContributors == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;
@@ -118,18 +118,18 @@ namespace DevMeter.UI.ViewModels
 
             //commits in last 30 days
             StatusMessage = "Fetching commits in last 30 days...";
-            var recentCommitsData = await dataCollector.GetRecentCommitsData();
-            if (!recentCommitsData.Succeeded || recentCommitsData == null)
+            var recentCommitsResult = await dataCollector.GetRecentCommitsData();
+            if (!recentCommitsResult.Succeeded || recentCommitsResult == null)
             {
-                if (recentCommitsData == null)
+                if (recentCommitsResult == null)
                     StatusMessage = Errors.Unexpected;
                 else
-                    StatusMessage = recentCommitsData.ErrorMessage;
+                    StatusMessage = recentCommitsResult.ErrorMessage;
                 StatusColor = Colors.Error;
                 return;
             }
-            var unpackedRecentCommits = recentCommitsData.Value;
-            if (unpackedRecentCommits == null)
+            var recentCommits = recentCommitsResult.Value;
+            if (recentCommits == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;
@@ -138,18 +138,18 @@ namespace DevMeter.UI.ViewModels
 
             //get data from linguist for language breakdown
             StatusMessage = "Fetching language data...";
-            var linguistData = await dataCollector.GetLinguistData();
-            if (!linguistData.Succeeded || linguistData == null)
+            var linguistResult = await dataCollector.GetLinguistData();
+            if (!linguistResult.Succeeded || linguistResult == null)
             {
-                if (linguistData == null)
+                if (linguistResult == null)
                     StatusMessage = Errors.Unexpected;
                 else
-                    StatusMessage = linguistData.ErrorMessage;
+                    StatusMessage = linguistResult.ErrorMessage;
                 StatusColor = Colors.Error;
                 return;
             }
-            var unpackedLanguages = linguistData.Value;
-            if (unpackedLanguages == null)
+            var languages = linguistResult.Value;
+            if (languages == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;
@@ -158,18 +158,18 @@ namespace DevMeter.UI.ViewModels
 
             //reading file tree (slow!)
             StatusMessage = "Reading file tree... (this may take a while)";
-            var fileTreeData = await dataCollector.GetRootFolderContents();
-            if (!fileTreeData.Succeeded || fileTreeData == null)
+            var fileTreeResult = await dataCollector.GetRootFolderContents();
+            if (!fileTreeResult.Succeeded || fileTreeResult == null)
             {
-                if (fileTreeData == null)
+                if (fileTreeResult == null)
                     StatusMessage = Errors.Unexpected;
                 else
-                    StatusMessage = fileTreeData.ErrorMessage;
+                    StatusMessage = fileTreeResult.ErrorMessage;
                 StatusColor = Colors.Error;
                 return;
             }
-            var unpackedFileTree = fileTreeData.Value;
-            if (unpackedFileTree == null)
+            var fileTree = fileTreeResult.Value;
+            if (fileTree == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;
@@ -178,20 +178,20 @@ namespace DevMeter.UI.ViewModels
 
             //traverse tree to get largest files
             StatusMessage = "Analyzing file sizes";
-            var largestFilesByLinesPq = new PriorityQueue<File, int>();
-            dataCollector.GetLargestFiles(unpackedFileTree, largestFilesByLinesPq);
+            var largestFilesByLinesHeap = new PriorityQueue<File, int>();
+            dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
 
             StatusMessage = string.Empty;
 
             //batch update ui
             RepoName = repoHandle.Substring(1);
-            TotalLinesViewModel.Update(unpackedFileTree.LinesOfCode, unpackedFileTree.LinesOfWhitespace);
-            TotalCommitsViewModel.Update(unpackedHtmlData.Commits, unpackedRecentCommits.Count);
-            TotalContributorsViewModel.Update(unpackedHtmlData);
-            LanguageBreakdownViewModel.Update(unpackedLanguages);
-            RecentActivityViewModel.Update(unpackedRecentCommits);
-            LargestFilesViewModel.Update(largestFilesByLinesPq);
-            TopContributorsViewModel.Update(unpackedTopContributorsData);
+            TotalLinesViewModel.Update(fileTree.LinesOfCode, fileTree.LinesOfWhitespace);
+            TotalCommitsViewModel.Update(htmlData.Commits, recentCommits.Count);
+            TotalContributorsViewModel.Update(htmlData);
+            LanguageBreakdownViewModel.Update(languages);
+            RecentActivityViewModel.Update(recentCommits);
+            LargestFilesViewModel.Update(largestFilesByLinesHeap);
+            TopContributorsViewModel.Update(topContributors);
 
         }
 
