@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace DevMeter.Core.Utils
 {
-    public class Result<T>
+    public class Result<T>(bool succeeded, string? errorMessage, T? value)
     {
-        public bool Succeeded { get; }
-        public string? ErrorMessage { get; }
-        public T? Value { get; }
-
-        public Result(bool succeeded, string? errorMessage, T? value)
-        {
-            Succeeded = succeeded;
-            ErrorMessage = errorMessage;
-            Value = value;
-        }
-
+        public bool Succeeded => succeeded;
+        public string? ErrorMessage => errorMessage;
+        public T? Value => value;
     }
 }

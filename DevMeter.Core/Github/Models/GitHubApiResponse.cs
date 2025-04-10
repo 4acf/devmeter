@@ -7,18 +7,10 @@ using System.Threading.Tasks;
 
 namespace DevMeter.Core.Github.Models
 {
-    public class GitHubApiResponse
+    public class GitHubApiResponse(bool succeeded, string? errorMessage = null, string? serializedData = null)
     {
-        public bool Succeeded { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? SerializedData { get; set; }
-
-        public GitHubApiResponse(bool succeeded, string? errorMessage = null, string? serializedData = null)
-        {
-            Succeeded = succeeded;
-            ErrorMessage = errorMessage;
-            SerializedData = serializedData;
-        }
-
+        public bool Succeeded => succeeded;
+        public string? ErrorMessage => errorMessage;
+        public string? SerializedData => serializedData;
     }
 }

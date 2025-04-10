@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DevMeter.Core.Processing;
 using DevMeter.Core.Processing.Formatting;
+using DevMeter.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

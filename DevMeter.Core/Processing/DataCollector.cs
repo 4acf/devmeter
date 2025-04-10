@@ -1,5 +1,6 @@
 ﻿using DevMeter.Core.Github;
 using DevMeter.Core.Github.Models;
+using DevMeter.Core.Github.Models.Json;
 using DevMeter.Core.Models;
 using DevMeter.Core.Utils;
 using System;
@@ -95,11 +96,7 @@ namespace DevMeter.Core.Processing
             var topContributors = new List<Contributor>();
             for (int i = 0; i < deserializedTopContributors.Count; i++)
             {
-                topContributors.Add(new Contributor
-                {
-                    Name = deserializedTopContributors[i].Username,
-                    Contributions = deserializedTopContributors[i].Contributions,
-                });
+                topContributors.Add(new Contributor(deserializedTopContributors[i].Username, deserializedTopContributors[i].Contributions));
             }
 
             return new Result<List<Contributor>>(true, null, topContributors);
@@ -400,30 +397,5 @@ namespace DevMeter.Core.Processing
         }
 
     }
-
-    public class HtmlData
-    {
-        public string Commits { get; }
-        public string Contributors { get; }
-
-        public HtmlData(string commits, string contributors)
-        {
-            Commits = commits;
-            Contributors = contributors;
-        }
-    }
-
-    public class FileData 
-    {
-        public int LinesOfCode { get; }
-        public int LinesOfWhitespace { get; }
-
-        public FileData(int linesOfCode, int linesOfWhitespace)
-        {
-            LinesOfCode = linesOfCode;
-            LinesOfWhitespace = linesOfWhitespace;
-        }
-    }
-
 
 }

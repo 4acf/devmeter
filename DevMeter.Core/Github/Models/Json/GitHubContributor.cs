@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace DevMeter.Core.Github.Models
+namespace DevMeter.Core.Github.Models.Json
 {
     public record class GitHubContributor(
         [property: JsonPropertyName("login")] string Username,

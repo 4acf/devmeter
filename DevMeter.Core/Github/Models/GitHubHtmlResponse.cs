@@ -7,19 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevMeter.Core.Github.Models
 {
-    public class GitHubHtmlResponse
+    public class GitHubHtmlResponse(bool succeeded, HttpStatusCode? statusCode = null, string? errorMessage = null, string? htmlData = null)
     {
-        public bool Succeeded { get; set; }
-        public string? ErrorMessage { get; set; }
-        public string? HtmlData { get; set; }
-        public HttpStatusCode? StatusCode { get; set; }
-
-        public GitHubHtmlResponse(bool succeeded, HttpStatusCode? statusCode = null, string? errorMessage = null, string? htmlData = null)
-        {
-            Succeeded = succeeded;
-            StatusCode = statusCode;
-            ErrorMessage = errorMessage;
-            HtmlData = htmlData;
-        }
+        public bool Succeeded => succeeded;
+        public HttpStatusCode? StatusCode => statusCode;
+        public string? ErrorMessage => errorMessage;
+        public string? HtmlData => htmlData;
     }
 }

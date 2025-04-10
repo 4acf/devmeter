@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DevMeter.Core.Github.Models;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore;
 using System;
@@ -12,6 +11,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using DevMeter.Core.Github.Models.Json;
 
 namespace DevMeter.UI.ViewModels
 {

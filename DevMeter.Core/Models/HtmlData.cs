@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DevMeter.Core.Models
 {
-    public class Contributor(string name, int contributions)
+    public class HtmlData(string commits, string contributors)
     {
-        public string Name => name;
-        public int Contributions => contributions;
+        public string Commits => commits;
+        public string Contributors => contributors;
     }
 }
