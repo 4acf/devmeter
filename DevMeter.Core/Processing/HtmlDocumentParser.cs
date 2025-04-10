@@ -14,7 +14,16 @@ namespace DevMeter.Core.Processing
 
         private static readonly HashSet<char> _numberChars =
         [
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
             ',',
         ];
 
@@ -33,12 +42,12 @@ namespace DevMeter.Core.Processing
                 .Where(span => span.GetAttributeValue("class", "").Contains("fgColor-default"))
                 .ToList();
 
-            foreach(var span in spans)
+            foreach (var span in spans)
             {
                 if (span.InnerText.Contains("Commit"))
                 {
                     var sb = new StringBuilder();
-                    foreach(var letter in span.InnerText)
+                    foreach (var letter in span.InnerText)
                     {
                         if (!_numberChars.Contains(letter))
                             break;
@@ -59,14 +68,14 @@ namespace DevMeter.Core.Processing
                 .Where(span => span.GetAttributeValue("class", "").Contains("Counter ml-1"))
                 .ToList();
 
-            foreach(var span in spans)
+            foreach (var span in spans)
             {
                 if (span.ParentNode.InnerText.Contains("Contributors"))
                     return span.InnerText;
             }
 
             return string.Empty;
-            
+
         }
 
         public FileData? ExtractLineCountFromHtml()
@@ -79,7 +88,7 @@ namespace DevMeter.Core.Processing
             {
                 return null;
             }
-                
+
             var innerText = locSpan.InnerText;
             var tokens = innerText.Split(' ', '(');
 

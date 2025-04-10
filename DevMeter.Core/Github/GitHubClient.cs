@@ -57,7 +57,7 @@ namespace DevMeter.Core.Github
 
             var url = new StringBuilder();
             url.Append($"{_baseApiUrl}repos{repoHandle}/commits?page={page}&per_page={perPage}");
-            if(timeSpan != -1)
+            if (timeSpan != -1)
             {
                 var since = DateTime.UtcNow.AddDays(-timeSpan);
                 url.Append($"&since={since}");
@@ -101,7 +101,7 @@ namespace DevMeter.Core.Github
             {
                 return new GitHubApiResponse(false, e.Message, null);
             }
-        } 
+        }
 
         public async Task<GitHubApiResponse> GetRootFolderContents(string repoHandle)
         {

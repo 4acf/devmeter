@@ -35,7 +35,8 @@ namespace DevMeter.UI.ViewModels
             IsVisible = false;
 
             Series = [
-                new ColumnSeries<ObservableValue> {
+                new ColumnSeries<ObservableValue>
+                {
                     IsVisible = false
                 },
             ];
@@ -55,14 +56,14 @@ namespace DevMeter.UI.ViewModels
         {
             var now = DateTime.UtcNow;
             var values = new int[31];
-            foreach (var commit in recentCommits) 
+            foreach (var commit in recentCommits)
             {
                 int difference = (now - commit.GetDate()).Days;
                 values[difference] += 1;
             }
             var reversed = values.Reverse().ToArray();
             var observableValues = new ObservableValue[reversed.Length];
-            for(int i = 0; i < reversed.Length; i++)
+            for (int i = 0; i < reversed.Length; i++)
             {
                 observableValues[i] = new ObservableValue(reversed[i]);
             }

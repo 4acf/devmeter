@@ -109,7 +109,7 @@ namespace DevMeter.UI.ViewModels
                 return;
             }
             var topContributors = topContributorsResult.Value;
-            if(topContributors == null)
+            if (topContributors == null)
             {
                 StatusMessage = Errors.Unexpected;
                 StatusColor = Colors.Error;

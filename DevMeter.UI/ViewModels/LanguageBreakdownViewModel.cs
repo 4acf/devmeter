@@ -25,7 +25,8 @@ namespace DevMeter.UI.ViewModels
         public LanguageBreakdownViewModel()
         {
             Series = [
-                new PieSeries<ObservableValue> { 
+                new PieSeries<ObservableValue>
+                {
                     IsVisible = false
                 },
             ];
@@ -43,7 +44,7 @@ namespace DevMeter.UI.ViewModels
             var newSeries = new ObservableCollection<ISeries>();
             foreach (var kvp in languages)
             {
-                if(!Filetypes.Colors.TryGetValue(kvp.Key, out var languageColor))
+                if (!Filetypes.Colors.TryGetValue(kvp.Key, out var languageColor))
                 {
                     languageColor = "#fdfdfd";
                 }

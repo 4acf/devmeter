@@ -63,12 +63,12 @@ namespace DevMeter.UI.ViewModels
         public void Update(List<Contributor> topContributors)
         {
             int n = topContributors.Count;
-            if(n > 0)
+            if (n > 0)
             {
                 Row0Col0 = topContributors[0].Name;
                 Row0Col1 = $"{StringFormatting.CommaString(topContributors[0].Contributions)}";
             }
-            if(n > 1)
+            if (n > 1)
             {
                 Row1Col0 = topContributors[1].Name;
                 Row1Col1 = $"{StringFormatting.CommaString(topContributors[1].Contributions)}";

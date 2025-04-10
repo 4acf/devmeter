@@ -39,7 +39,8 @@ namespace DevMeter.UI.ViewModels
             IsVisible = false;
 
             Series = [
-                new ColumnSeries<ObservableValue> {
+                new ColumnSeries<ObservableValue>
+                {
                     IsVisible = false
                 },
             ];

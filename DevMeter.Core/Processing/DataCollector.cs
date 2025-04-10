@@ -35,7 +35,7 @@ namespace DevMeter.Core.Processing
             {
                 errorMessage = JsonSerializer.Deserialize<GitHubApiError>(response.SerializedData)?.Message;
             }
-            if(errorMessage != null && errorMessage.ToLower().Contains("rate limit")) 
+            if (errorMessage != null && errorMessage.ToLower().Contains("rate limit"))
             {
                 errorMessage = "Rate limit reached";
             }
@@ -138,7 +138,7 @@ namespace DevMeter.Core.Processing
         public async Task<Result<Dictionary<string, long>>> GetLinguistData()
         {
             var languagesResponse = await _gitHubClient.GetLanguages(_repoHandle);
-            if(!languagesResponse.Succeeded || string.IsNullOrEmpty(languagesResponse.SerializedData))
+            if (!languagesResponse.Succeeded || string.IsNullOrEmpty(languagesResponse.SerializedData))
             {
                 var result = new Result<Dictionary<string, long>>(false, HandleError(languagesResponse), null);
                 return result;
@@ -151,14 +151,14 @@ namespace DevMeter.Core.Processing
         public async Task<Result<Folder>> GetRootFolderContents()
         {
             var rootFolderContentsResponse = await _gitHubClient.GetRootFolderContents(_repoHandle);
-            if(!rootFolderContentsResponse.Succeeded || string.IsNullOrEmpty(rootFolderContentsResponse.SerializedData))
+            if (!rootFolderContentsResponse.Succeeded || string.IsNullOrEmpty(rootFolderContentsResponse.SerializedData))
             {
                 var result = new Result<Folder>(false, HandleError(rootFolderContentsResponse), null);
                 return result;
             }
 
             var deserializedRootFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(rootFolderContentsResponse.SerializedData);
-            if(deserializedRootFolderContents == null)
+            if (deserializedRootFolderContents == null)
             {
                 var result = new Result<Folder>(false, Errors.CantReadRootFolderContents, null);
                 return result;
@@ -167,10 +167,10 @@ namespace DevMeter.Core.Processing
             int linesOfCode = 0;
             int linesOfWhitespace = 0;
             var filesystemObjects = new List<FilesystemObject>();
-            foreach(var content in deserializedRootFolderContents)
+            foreach (var content in deserializedRootFolderContents)
             {
 
-                if(content.Type == Filetypes.Dir)
+                if (content.Type == Filetypes.Dir)
                 {
                     var subfolderData = await GetFolderContents(content);
                     if (!subfolderData.Succeeded || subfolderData == null)
@@ -322,13 +322,13 @@ namespace DevMeter.Core.Processing
         private async Task<Result<Models.File>> GetFile(GitHubContents content)
         {
 
-            if(content.Type == Filetypes.Dir)
+            if (content.Type == Filetypes.Dir)
             {
                 return new Result<Models.File>(false, Errors.IncorrectType, null);
             }
 
             var extension = content.Name.Split('.')[^1].ToLower();
-            if(Filetypes.Ignore.Contains(extension) || Filetypes.Ignore.Contains(content.Name))
+            if (Filetypes.Ignore.Contains(extension) || Filetypes.Ignore.Contains(content.Name))
             {
                 var blankFile = new Models.File(
                     content.Name,
@@ -365,7 +365,7 @@ namespace DevMeter.Core.Processing
 
             var file = new Models.File(
                 content.Name,
-                fileData.LinesOfCode, 
+                fileData.LinesOfCode,
                 fileData.LinesOfWhitespace,
                 extension
                 );
@@ -376,20 +376,20 @@ namespace DevMeter.Core.Processing
         public void GetLargestFiles(Folder folder, PriorityQueue<Models.File, int> priorityQueue)
         {
 
-            foreach(var filesystemObject in folder.FilesystemObjects)
+            foreach (var filesystemObject in folder.FilesystemObjects)
             {
-                if(filesystemObject is Models.File file)
+                if (filesystemObject is Models.File file)
                 {
-                    if(file.LinesOfCode > 0)
+                    if (file.LinesOfCode > 0)
                     {
                         priorityQueue.Enqueue(file, file.LinesOfCode);
                     }
-                    while(priorityQueue.Count > _numberOfLargestFiles)
+                    while (priorityQueue.Count > _numberOfLargestFiles)
                     {
                         priorityQueue.Dequeue();
                     }
                 }
-                else if(filesystemObject is Folder subfolder)
+                else if (filesystemObject is Folder subfolder)
                 {
                     GetLargestFiles(subfolder, priorityQueue);
                 }
