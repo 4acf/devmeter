@@ -1,18 +1,12 @@
-﻿using LiveChartsCore.SkiaSharpView.Extensions;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DevMeter.Core.Utils;
 using LiveChartsCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using DevMeter.Core.Utils;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using LiveChartsCore.Defaults;
-using System.Diagnostics;
 
 namespace DevMeter.UI.ViewModels
 {

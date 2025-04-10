@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using DevMeter.Core.Github.Models;
 using System.Text;
-using System.Threading.Tasks;
-using DevMeter.Core.Github.Models;
 
 namespace DevMeter.Core.Github
 {

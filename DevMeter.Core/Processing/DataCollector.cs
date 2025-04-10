@@ -3,14 +3,7 @@ using DevMeter.Core.Github.Models;
 using DevMeter.Core.Github.Models.Json;
 using DevMeter.Core.Models;
 using DevMeter.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace DevMeter.Core.Processing
 {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DevMeter.Core.Models;
+﻿using DevMeter.Core.Models;
 using HtmlAgilityPack;
+using System.Text;
 
 namespace DevMeter.Core.Processing
 {

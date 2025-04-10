@@ -1,20 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevMeter.Core.Github;
-using DevMeter.Core.Github.Models;
-using DevMeter.Core.Processing;
-using DevMeter.Core.Processing.Formatting;
 using DevMeter.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml;
+using DevMeter.Core.Processing;
 using DevMeter.Core.Utils;
-using Avalonia.Remote.Protocol;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DevMeter.UI.ViewModels
 {

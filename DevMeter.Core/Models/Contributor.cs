@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevMeter.Core.Models
+﻿namespace DevMeter.Core.Models
 {
     public class Contributor(string name, int contributions)
     {

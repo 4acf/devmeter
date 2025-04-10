@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DevMeter.Core.Github.Models
+﻿namespace DevMeter.Core.Github.Models
 {
     public class GitHubApiResponse(bool succeeded, string? errorMessage = null, string? serializedData = null)
     {

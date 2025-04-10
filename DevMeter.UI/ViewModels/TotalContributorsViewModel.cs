@@ -1,11 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DevMeter.Core.Processing.Formatting;
 using DevMeter.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DevMeter.Core.Processing.Formatting;
 
 namespace DevMeter.UI.ViewModels
 {

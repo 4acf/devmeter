@@ -1,17 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LiveChartsCore.SkiaSharpView;
+using DevMeter.Core.Github.Models.Json;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.Measure;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Measure;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
-using DevMeter.Core.Github.Models.Json;
 
 namespace DevMeter.UI.ViewModels
 {
