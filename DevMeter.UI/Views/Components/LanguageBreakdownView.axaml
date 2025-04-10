@@ -10,7 +10,7 @@
 			 x:DataType="vm:LanguageBreakdownViewModel"
 			 Background="Transparent">
 
-	<Border Background="#202123" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+	<Border Background="{DynamicResource Background1}" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center">
 		<Grid RowDefinitions="Auto, *" Width="300" Height="250" Margin="25">
 			<TextBlock Grid.Row="0" Classes="h3gray" Text="Language Breakdown" Margin="3 0 0 10"></TextBlock>
 			<lvc:PieChart Grid.Row="1" Series="{Binding Series}"></lvc:PieChart>

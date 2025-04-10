@@ -13,7 +13,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="devmeter"
 		TransparencyLevelHint="AcrylicBlur"
-		Background="#17181a"
+		Background="{DynamicResource Background2}"
 		ExtendClientAreaToDecorationsHint="true">
 
     <Design.DataContext>
@@ -30,7 +30,7 @@
 					<TextBox.InnerRightContent>
 						<Button Classes="search" Command="{Binding SearchCommand}">
 							<materialIcons:MaterialIcon 
-								Foreground="#656668"
+								Foreground="{DynamicResource Foreground2}"
 								Kind="Search"
 							/>
 						</Button>
