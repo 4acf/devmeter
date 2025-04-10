@@ -11,20 +11,28 @@
     </Application.DataTemplates>
 
 	<Application.Resources>
-		<!-- Fluent Theme v11.2.5 Overrides -->
-		<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#202123"/>
-		<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#202123" />
-		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#202123" />
-		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#202123" />
-		<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+		<ResourceDictionary>
 
-		<!-- Colors -->
-		<SolidColorBrush x:Key="Foreground1" Color="#fdfdfd" />
-		<SolidColorBrush x:Key="Foreground2" Color="#656668" />
-		<SolidColorBrush x:Key="Foreground3" Color="#2a2b2d" />
-		<SolidColorBrush x:Key="Background1" Color="#202123" />
-		<SolidColorBrush x:Key="Background2" Color="#17181a" />
-		<SolidColorBrush x:Key="HighlightGreen" Color="#02b075" />
+			<!-- Fluent Theme v11.2.5 Overrides -->
+			<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#202123"/>
+			<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#202123" />
+			<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#202123" />
+			<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#202123" />
+			<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+
+			<!-- Colors -->
+			<SolidColorBrush x:Key="Foreground1" Color="#fdfdfd" />
+			<SolidColorBrush x:Key="Foreground2" Color="#656668" />
+			<SolidColorBrush x:Key="Foreground3" Color="#2a2b2d" />
+			<SolidColorBrush x:Key="Background1" Color="#202123" />
+			<SolidColorBrush x:Key="Background2" Color="#17181a" />
+			<SolidColorBrush x:Key="HighlightGreen" Color="#02b075" />
+
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="avares://LoadingIndicators.Avalonia/LoadingIndicators.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+		</ResourceDictionary>
 	</Application.Resources>
 	
     <Application.Styles>

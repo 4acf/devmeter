@@ -7,6 +7,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:li="using:LoadingIndicators.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DevMeter.UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -28,12 +29,15 @@
 				<TextBlock Grid.Column="0" Classes="h1" Text="{Binding RepoName}"></TextBlock>
 				<TextBox Grid.Column="1" Classes="search" HorizontalAlignment="Right" Text="{Binding SearchString}" Watermark="Search...">
 					<TextBox.InnerRightContent>
-						<Button Classes="search" Command="{Binding SearchCommand}">
-							<materialIcons:MaterialIcon 
-								Foreground="{DynamicResource Foreground2}"
-								Kind="Search"
-							/>
-						</Button>
+						<Panel>
+							<Button Classes="search" Command="{Binding SearchCommand}" IsVisible="{Binding !IsLoading}" IsEnabled="True">
+									<materialIcons:MaterialIcon
+										Foreground="{DynamicResource Foreground2}"
+										Kind="Search"
+									/>
+							</Button>
+							<li:LoadingIndicator IsVisible="{Binding IsLoading}" IsActive="{Binding IsLoading}" Mode="Arc" SpeedRatio="1.0"/>
+						</Panel>
 					</TextBox.InnerRightContent>
 					<TextBox.KeyBindings>
 						<KeyBinding Command="{Binding SearchCommand}" Gesture="Enter"/>

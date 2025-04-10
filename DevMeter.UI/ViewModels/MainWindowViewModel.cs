@@ -24,6 +24,9 @@ namespace DevMeter.UI.ViewModels
         [ObservableProperty]
         private string _repoName;
 
+        [ObservableProperty]
+        private bool _isLoading;
+
         private readonly GitHubClient _gitHubClient;
 
         internal TotalLinesViewModel TotalLinesViewModel { get; }
@@ -38,6 +41,7 @@ namespace DevMeter.UI.ViewModels
         {
             StatusColor = Colors.Status;
             RepoName = "-";
+            IsLoading = false;
             _gitHubClient = new GitHubClient(App.Configuration?["PAT"]);
             TotalLinesViewModel = new TotalLinesViewModel();
             TotalCommitsViewModel = new TotalCommitsViewModel();
@@ -52,6 +56,7 @@ namespace DevMeter.UI.ViewModels
         private async Task Search()
         {
 
+            IsLoading = true;
             StatusColor = Colors.Status;
 
             if (!InputParser.TryParse(SearchString, out var result))
@@ -172,6 +177,7 @@ namespace DevMeter.UI.ViewModels
             var largestFilesByLinesHeap = new PriorityQueue<File, int>();
             dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
 
+            IsLoading = false;
             StatusMessage = string.Empty;
 
             //batch update ui
