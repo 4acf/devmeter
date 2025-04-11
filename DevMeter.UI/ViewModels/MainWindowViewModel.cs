@@ -147,7 +147,15 @@ namespace DevMeter.UI.ViewModels
             //traverse tree to get largest files
             StatusMessage = "Analyzing file sizes";
             var largestFilesByLinesHeap = new PriorityQueue<File, int>();
-            dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
+            try
+            {
+                dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
+            }
+            catch (Exception ex)
+            {
+                UpdateDisplayToFailState(ex.Message);
+                return;
+            }
 
             IsLoading = false;
             StatusMessage = string.Empty;
