@@ -141,95 +141,12 @@ namespace DevMeter.Core.Processing
             return new Result<Dictionary<string, long>>(true, null, deserializedLanguagesResponse);
         }
 
-        public async Task<Result<Folder>> GetRootFolderContents()
+        public async Task<Result<Folder>> GetFolderContents(GitHubContents? input)
         {
-            var rootFolderContentsResponse = await _gitHubClient.GetRootFolderContents(_repoHandle);
-            if (!rootFolderContentsResponse.Succeeded || string.IsNullOrEmpty(rootFolderContentsResponse.SerializedData))
-            {
-                var result = new Result<Folder>(false, HandleError(rootFolderContentsResponse), null);
-                return result;
-            }
 
-            var deserializedRootFolderContents = JsonSerializer.Deserialize<List<GitHubContents>>(rootFolderContentsResponse.SerializedData);
-            if (deserializedRootFolderContents == null)
-            {
-                var result = new Result<Folder>(false, Errors.FailedToReadRootFolderContents, null);
-                return result;
-            }
-
-            int linesOfCode = 0;
-            int linesOfWhitespace = 0;
-            var filesystemObjects = new List<FilesystemObject>();
-            foreach (var content in deserializedRootFolderContents)
-            {
-
-                if (content.Type == Filetypes.Dir)
-                {
-                    var subfolderData = await GetFolderContents(content);
-                    if (!subfolderData.Succeeded || subfolderData == null)
-                    {
-                        var result = new Result<Folder>(
-                            false,
-                            subfolderData == null ? Errors.Unexpected : subfolderData.ErrorMessage,
-                            null
-                        );
-                        return result;
-                    }
-
-                    var subfolder = subfolderData.Value;
-                    if (subfolder == null)
-                    {
-                        var result = new Result<Folder>(false, Errors.FailedToReadFolderContents, null);
-                        return result;
-                    }
-
-                    filesystemObjects.Add(subfolder);
-                    linesOfCode += subfolder.LinesOfCode;
-                    linesOfWhitespace += subfolder.LinesOfWhitespace;
-
-                }
-                else
-                {
-                    var fileData = await GetFile(content);
-                    if (!fileData.Succeeded || fileData == null)
-                    {
-                        var result = new Result<Folder>(
-                            false,
-                            fileData == null ? Errors.Unexpected : fileData.ErrorMessage,
-                            null
-                        );
-                        return result;
-                    }
-
-                    var file = fileData.Value;
-                    if (file == null)
-                    {
-                        var result = new Result<Folder>(false, Errors.FailedToReadFileContents, null);
-                        return result;
-                    }
-
-                    filesystemObjects.Add(file);
-                    linesOfCode += file.LinesOfCode;
-                    linesOfWhitespace += file.LinesOfWhitespace;
-
-                }
-
-            }
-
-            var folder = new Folder(
-                "root",
-                linesOfCode,
-                linesOfWhitespace,
-                filesystemObjects
-                );
-
-            return new Result<Folder>(true, null, folder);
-
-        }
-
-        private async Task<Result<Folder>> GetFolderContents(GitHubContents input)
-        {
-            var folderContentsResponse = await _gitHubClient.GetFolderContents(input.Url);
+            var folderContentsResponse = input == null ? 
+                await _gitHubClient.GetRootFolderContents(_repoHandle) : 
+                await _gitHubClient.GetFolderContents(input.Url);
             if (!folderContentsResponse.Succeeded || string.IsNullOrEmpty(folderContentsResponse.SerializedData))
             {
                 var result = new Result<Folder>(false, HandleError(folderContentsResponse), null);
@@ -303,7 +220,7 @@ namespace DevMeter.Core.Processing
             }
 
             var folder = new Folder(
-                input.Name,
+                input != null ? input.Name : "root",
                 linesOfCode,
                 linesOfWhitespace,
                 filesystemObjects

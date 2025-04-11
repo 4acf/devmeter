@@ -158,7 +158,7 @@ namespace DevMeter.UI.ViewModels
 
             //reading file tree (slow!)
             StatusMessage = "Reading file tree... (this may take a while)";
-            var fileTreeResult = await dataCollector.GetRootFolderContents();
+            var fileTreeResult = await dataCollector.GetFolderContents(null);
             if (DataCollectionFailed<Folder>(fileTreeResult))
             {
                 return;
