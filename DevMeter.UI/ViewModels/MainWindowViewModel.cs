@@ -5,6 +5,7 @@ using DevMeter.Core.Github.Models.Json;
 using DevMeter.Core.Models;
 using DevMeter.Core.Processing;
 using DevMeter.Core.Utils;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,6 +54,29 @@ namespace DevMeter.UI.ViewModels
             TopContributorsViewModel = new TopContributorsViewModel();
         }
 
+        private async Task<T?> CallDataCollector<T>(Func<Task<Result<T>>> func, string statusMessage)
+        {
+            try
+            {
+                StatusMessage = statusMessage;
+                var result = await func();
+                if(DataCollectionFailed<T>(result))
+                {
+                    return default;
+                }
+                if (IsResultValueNull<T>(result.Value))
+                {
+                    return default;
+                }
+                return result.Value;
+            }
+            catch(Exception ex)
+            {
+                UpdateDisplayToFailState(ex.Message);
+                return default;
+            }
+        }
+
         private void UpdateDisplayToFailState(string? errorMessage)
         {
             IsLoading = false;
@@ -60,7 +84,7 @@ namespace DevMeter.UI.ViewModels
             StatusColor = Colors.Error;
         }
 
-        private bool IsResultValueNull<T>(T? obj) where T : class
+        private bool IsResultValueNull<T>(T? obj)
         {
             if (obj == null)
             {
@@ -105,88 +129,38 @@ namespace DevMeter.UI.ViewModels
 
             var dataCollector = new DataCollector(_gitHubClient, repoHandle);
 
-            //get number of commits + number of contributors
-            StatusMessage = "Fetching HTML data...";
-            var htmlDataResult = await dataCollector.GetHtmlData();
-            if (DataCollectionFailed<HtmlData>(htmlDataResult))
-            {
-                return;
-            }
-            var htmlData = htmlDataResult.Value;
-            if (IsResultValueNull<HtmlData>(htmlData))
-            {
-                return;
-            }
+            var htmlData = await CallDataCollector(() => dataCollector.GetHtmlData(), "Fetching HTML data...");
+            if (htmlData == null) return;
 
-            //get handles of the top contributors
-            StatusMessage = "Fetching top contributors...";
-            var topContributorsResult = await dataCollector.GetTopContributorData();
-            if (DataCollectionFailed<List<Contributor>>(topContributorsResult))
-            {
-                return;
-            }
-            var topContributors = topContributorsResult.Value;
-            if (IsResultValueNull<List<Contributor>>(topContributors))
-            {
-                return;
-            }
+            var topContributors = await CallDataCollector(() => dataCollector.GetTopContributorData(), "Fetching top contributors...");
+            if (topContributors == null) return;
 
-            //commits in last 30 days
-            StatusMessage = "Fetching commits in last 30 days...";
-            var recentCommitsResult = await dataCollector.GetRecentCommitsData();
-            if (DataCollectionFailed<List<GitHubCommit>>(recentCommitsResult))
-            {
-                return;
-            }
-            var recentCommits = recentCommitsResult.Value;
-            if (IsResultValueNull<List<GitHubCommit>>(recentCommits))
-            {
-                return;
-            }
+            var recentCommits = await CallDataCollector(() => dataCollector.GetRecentCommitsData(), "Fetching commits in last 30 days...");
+            if (recentCommits == null) return;
 
-            //get data from linguist for language breakdown
-            StatusMessage = "Fetching language data...";
-            var linguistResult = await dataCollector.GetLinguistData();
-            if (DataCollectionFailed<Dictionary<string, long>>(linguistResult))
-            {
-                return;
-            }
-            var languages = linguistResult.Value;
-            if (IsResultValueNull<Dictionary<string, long>>(languages))
-            {
-                return;
-            }
+            var languages = await CallDataCollector(() => dataCollector.GetLinguistData(), "Fetching language data...");
+            if (languages == null) return;
 
-            //reading file tree (slow!)
-            StatusMessage = "Reading file tree... (this may take a while)";
-            var fileTreeResult = await dataCollector.GetFolderContents(null);
-            if (DataCollectionFailed<Folder>(fileTreeResult))
-            {
-                return;
-            }
-            var fileTree = fileTreeResult.Value;
-            if (IsResultValueNull<Folder>(fileTree))
-            {
-                return;
-            }
+            var fileTree = await CallDataCollector(() => dataCollector.GetFolderContents(null), "Reading file tree... (this may take a while)");
+            if (fileTree == null) return;
 
             //traverse tree to get largest files
             StatusMessage = "Analyzing file sizes";
             var largestFilesByLinesHeap = new PriorityQueue<File, int>();
-            dataCollector.GetLargestFiles(fileTree!, largestFilesByLinesHeap);
+            dataCollector.GetLargestFiles(fileTree, largestFilesByLinesHeap);
 
             IsLoading = false;
             StatusMessage = string.Empty;
 
             //batch update ui
             RepoName = repoHandle.Substring(1);
-            TotalLinesViewModel.Update(fileTree!.LinesOfCode, fileTree!.LinesOfWhitespace);
-            TotalCommitsViewModel.Update(htmlData!.Commits, recentCommits!.Count);
-            TotalContributorsViewModel.Update(htmlData!);
-            LanguageBreakdownViewModel.Update(languages!);
-            RecentActivityViewModel.Update(recentCommits!);
-            LargestFilesViewModel.Update(largestFilesByLinesHeap!);
-            TopContributorsViewModel.Update(topContributors!);
+            TotalLinesViewModel.Update(fileTree.LinesOfCode, fileTree.LinesOfWhitespace);
+            TotalCommitsViewModel.Update(htmlData.Commits, recentCommits.Count);
+            TotalContributorsViewModel.Update(htmlData);
+            LanguageBreakdownViewModel.Update(languages);
+            RecentActivityViewModel.Update(recentCommits);
+            LargestFilesViewModel.Update(largestFilesByLinesHeap);
+            TopContributorsViewModel.Update(topContributors);
 
         }
 
