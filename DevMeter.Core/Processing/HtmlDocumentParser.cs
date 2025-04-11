@@ -31,7 +31,7 @@ namespace DevMeter.Core.Processing
             _htmlDocument.LoadHtml(html);
         }
 
-        public string ExtractCommitsFromHtml()
+        public string? ExtractCommitsFromHtml()
         {
 
             var spans = _htmlDocument.DocumentNode.Descendants("span")
@@ -53,11 +53,11 @@ namespace DevMeter.Core.Processing
                 }
             }
 
-            return string.Empty;
+            return null;
 
         }
 
-        public string ExtractContributorsFromHtml()
+        public string? ExtractContributorsFromHtml()
         {
 
             var spans = _htmlDocument.DocumentNode.Descendants("span")
@@ -70,7 +70,7 @@ namespace DevMeter.Core.Processing
                     return span.InnerText;
             }
 
-            return string.Empty;
+            return null;
 
         }
 

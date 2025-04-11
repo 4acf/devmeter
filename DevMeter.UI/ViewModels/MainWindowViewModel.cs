@@ -53,32 +53,33 @@ namespace DevMeter.UI.ViewModels
             TopContributorsViewModel = new TopContributorsViewModel();
         }
 
-        private bool DataCollectionFailed<T>(Result<T>? obj)
+        private void UpdateDisplayToFailState(string? errorMessage)
         {
-            if(obj == null)
+            IsLoading = false;
+            StatusMessage = errorMessage ?? Errors.Unexpected;
+            StatusColor = Colors.Error;
+        }
+
+        private bool IsResultValueNull<T>(T? obj) where T : class
+        {
+            if (obj == null)
             {
-                IsLoading = false;
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
-                return true;
-            }
-            if (!obj.Succeeded)
-            {
-                IsLoading = false;
-                StatusMessage = obj.ErrorMessage;
-                StatusColor = Colors.Error;
+                UpdateDisplayToFailState(null);
                 return true;
             }
             return false;
         }
 
-        private bool IsResultValueNull<T>(T? obj) where T : class
+        private bool DataCollectionFailed<T>(Result<T>? obj)
         {
             if(obj == null)
             {
-                IsLoading = false;
-                StatusMessage = Errors.Unexpected;
-                StatusColor = Colors.Error;
+                UpdateDisplayToFailState(null);
+                return true;
+            }
+            if (!obj.Succeeded)
+            {
+                UpdateDisplayToFailState(obj.ErrorMessage);
                 return true;
             }
             return false;
