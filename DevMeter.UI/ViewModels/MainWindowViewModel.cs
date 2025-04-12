@@ -7,6 +7,8 @@ using DevMeter.Core.Processing;
 using DevMeter.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DevMeter.UI.ViewModels
@@ -31,6 +33,8 @@ namespace DevMeter.UI.ViewModels
 
         private readonly GitHubClient _gitHubClient;
 
+        private CancellationTokenSource _cancellationTokenSource;
+
         internal TotalLinesViewModel TotalLinesViewModel { get; }
         internal TotalCommitsViewModel TotalCommitsViewModel { get; }
         internal TotalContributorsViewModel TotalContributorsViewModel { get; }
@@ -45,6 +49,7 @@ namespace DevMeter.UI.ViewModels
             RepoName = "-";
             IsLoading = false;
             _gitHubClient = new GitHubClient(App.Configuration?["PAT"]);
+            _cancellationTokenSource = new CancellationTokenSource();
             TotalLinesViewModel = new TotalLinesViewModel();
             TotalCommitsViewModel = new TotalCommitsViewModel();
             TotalContributorsViewModel = new TotalContributorsViewModel();
@@ -82,6 +87,12 @@ namespace DevMeter.UI.ViewModels
             IsLoading = false;
             StatusMessage = errorMessage ?? Errors.Unexpected;
             StatusColor = Colors.Error;
+
+            if(_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
         }
 
         private bool IsResultValueNull<T>(T? obj)
@@ -118,6 +129,7 @@ namespace DevMeter.UI.ViewModels
 
             if (!InputParser.TryParse(SearchString, out var result))
             {
+                IsLoading = false;
                 StatusMessage = result;
                 StatusColor = Colors.Error;
                 return;
@@ -141,7 +153,7 @@ namespace DevMeter.UI.ViewModels
             var languages = await CallDataCollector(() => dataCollector.GetLinguistData(), "Fetching language data...");
             if (languages == null) return;
 
-            var fileTree = await CallDataCollector(() => dataCollector.GetFolderContents(null), "Reading file tree... (this may take a while)");
+            var fileTree = await CallDataCollector(() => dataCollector.GetFolderContents(null, _cancellationTokenSource.Token), "Reading file tree... (this may take a while)");
             if (fileTree == null) return;
 
             //traverse tree to get largest files
@@ -170,6 +182,12 @@ namespace DevMeter.UI.ViewModels
             LargestFilesViewModel.Update(largestFilesByLinesHeap);
             TopContributorsViewModel.Update(topContributors);
 
+        }
+
+        [RelayCommand]
+        private void Cancel()
+        {
+            _cancellationTokenSource.Cancel();
         }
 
     }

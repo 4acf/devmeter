@@ -141,8 +141,10 @@ namespace DevMeter.Core.Processing
             return new Result<Dictionary<string, long>>(true, null, deserializedLanguagesResponse);
         }
 
-        public async Task<Result<Folder>> GetFolderContents(GitHubContents? input)
+        public async Task<Result<Folder>> GetFolderContents(GitHubContents? input, CancellationToken cancellationToken)
         {
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             var folderContentsResponse = input == null ? 
                 await _gitHubClient.GetRootFolderContents(_repoHandle) : 
@@ -168,7 +170,7 @@ namespace DevMeter.Core.Processing
 
                 if (content.Type == Filetypes.Dir)
                 {
-                    var subfolderData = await GetFolderContents(content);
+                    var subfolderData = await GetFolderContents(content, cancellationToken);
                     if (!subfolderData.Succeeded || subfolderData == null)
                     {
                         var result = new Result<Folder>(

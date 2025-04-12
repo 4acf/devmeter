@@ -22,6 +22,10 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+
+	<Window.KeyBindings>
+		<KeyBinding Command="{Binding CancelCommand}" Gesture="Escape" />
+	</Window.KeyBindings>
 	
 	<Panel>
 		<Grid RowDefinitions="Auto, Auto, *" Margin="66">
