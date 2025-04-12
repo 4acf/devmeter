@@ -1,13 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevMeter.Core.Github;
-using DevMeter.Core.Github.Models.Json;
 using DevMeter.Core.Models;
 using DevMeter.Core.Processing;
 using DevMeter.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -65,7 +63,7 @@ namespace DevMeter.UI.ViewModels
             {
                 StatusMessage = statusMessage;
                 var result = await func();
-                if(DataCollectionFailed<T>(result))
+                if (DataCollectionFailed<T>(result))
                 {
                     return default;
                 }
@@ -75,7 +73,7 @@ namespace DevMeter.UI.ViewModels
                 }
                 return result.Value;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 UpdateDisplayToFailState(ex.Message);
                 return default;
@@ -87,12 +85,6 @@ namespace DevMeter.UI.ViewModels
             IsLoading = false;
             StatusMessage = errorMessage ?? Errors.Unexpected;
             StatusColor = Colors.Error;
-
-            if(_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-                _cancellationTokenSource = new CancellationTokenSource();
-            }
         }
 
         private bool IsResultValueNull<T>(T? obj)
@@ -107,7 +99,7 @@ namespace DevMeter.UI.ViewModels
 
         private bool DataCollectionFailed<T>(Result<T>? obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 UpdateDisplayToFailState(null);
                 return true;
@@ -126,6 +118,9 @@ namespace DevMeter.UI.ViewModels
 
             IsLoading = true;
             StatusColor = Colors.Status;
+
+            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
 
             if (!InputParser.TryParse(SearchString, out var result))
             {

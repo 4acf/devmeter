@@ -146,8 +146,8 @@ namespace DevMeter.Core.Processing
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var folderContentsResponse = input == null ? 
-                await _gitHubClient.GetRootFolderContents(_repoHandle) : 
+            var folderContentsResponse = input == null ?
+                await _gitHubClient.GetRootFolderContents(_repoHandle) :
                 await _gitHubClient.GetFolderContents(input.Url);
             if (!folderContentsResponse.Succeeded || string.IsNullOrEmpty(folderContentsResponse.SerializedData))
             {
