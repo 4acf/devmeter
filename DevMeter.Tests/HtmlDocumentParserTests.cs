@@ -37,9 +37,8 @@ namespace DevMeter.Tests
 
         [Fact]
         public void ExtractCommitsFromHtml_NoCommitsSpan_ReturnsNull()
-        {
-            var html = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title></title>\r\n</head>\r\n<body>\r\n\r\n</body>\r\n</html>";
-            var htmlDocumentParser = MakeHtmlDocumentParser(html);
+        {;
+            var htmlDocumentParser = MakeHtmlDocumentParser(HtmlStrings.EmptyHtml);
 
             var result = htmlDocumentParser.ExtractCommitsFromHtml();
 
