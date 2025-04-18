@@ -10,12 +10,12 @@ namespace DevMeter.Core.Processing
     public class DataCollector
     {
 
-        private GitHubClient _gitHubClient;
+        private IGitHubClient _gitHubClient;
         private string _repoHandle;
         private const int _topContributorsSize = 7;
         private const int _numberOfLargestFiles = 10;
 
-        public DataCollector(GitHubClient gitHubClient, string repoHandle)
+        public DataCollector(IGitHubClient gitHubClient, string repoHandle)
         {
             _gitHubClient = gitHubClient;
             _repoHandle = repoHandle;

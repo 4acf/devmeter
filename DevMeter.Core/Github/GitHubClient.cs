@@ -3,7 +3,7 @@ using System.Text;
 
 namespace DevMeter.Core.Github
 {
-    public class GitHubClient
+    public class GitHubClient : IGitHubClient
     {
 
         private static readonly Uri _baseApiUrl = new("https://api.github.com", UriKind.Absolute);

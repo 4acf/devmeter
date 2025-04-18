@@ -29,7 +29,7 @@ namespace DevMeter.UI.ViewModels
         [ObservableProperty]
         private bool _isLoading;
 
-        private readonly GitHubClient _gitHubClient;
+        private readonly IGitHubClient _gitHubClient;
 
         private CancellationTokenSource _cancellationTokenSource;
 
