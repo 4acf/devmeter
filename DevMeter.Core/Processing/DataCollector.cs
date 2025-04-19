@@ -170,18 +170,18 @@ namespace DevMeter.Core.Processing
 
                 if (content.Type == Filetypes.Dir)
                 {
-                    var subfolderData = await GetFolderContents(content, cancellationToken);
-                    if (!subfolderData.Succeeded || subfolderData == null)
+                    var subfolderResult = await GetFolderContents(content, cancellationToken);
+                    if (!subfolderResult.Succeeded || subfolderResult == null)
                     {
                         var result = new Result<Folder>(
                             false,
-                            subfolderData == null ? Errors.Unexpected : subfolderData.ErrorMessage,
+                            subfolderResult == null ? Errors.Unexpected : subfolderResult.ErrorMessage,
                             null
                             );
                         return result;
                     }
 
-                    var subfolder = subfolderData.Value;
+                    var subfolder = subfolderResult.Value;
                     if (subfolder == null)
                     {
                         var result = new Result<Folder>(false, Errors.FailedToReadFolderContents, null);
@@ -195,18 +195,18 @@ namespace DevMeter.Core.Processing
                 }
                 else
                 {
-                    var fileData = await GetFile(content);
-                    if (!fileData.Succeeded || fileData == null)
+                    var fileResult = await GetFile(content);
+                    if (!fileResult.Succeeded || fileResult == null)
                     {
                         var result = new Result<Folder>(
                             false,
-                            fileData == null ? Errors.Unexpected : fileData.ErrorMessage,
+                            fileResult == null ? Errors.Unexpected : fileResult.ErrorMessage,
                             null
                             );
                         return result;
                     }
 
-                    var file = fileData.Value;
+                    var file = fileResult.Value;
                     if (file == null)
                     {
                         var result = new Result<Folder>(false, Errors.FailedToReadFileContents, null);
