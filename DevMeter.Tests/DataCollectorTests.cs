@@ -180,6 +180,30 @@ namespace DevMeter.Tests
         }
 
         [Fact]
+        public async void GetFolderContents_ReceivingNullJson_ReturnsUnsuccessfulResult()
+        {
+            var stub = new FakeGitHubClient();
+            stub.Success = true;
+            var dataCollector = MakeDataCollector(stub);
+
+            var result = await dataCollector.GetFolderContents(null, new CancellationToken());
+
+            Assert.False(result.Succeeded);
+        }
+
+        [Fact]
+        public async void GetFolderContents_BadRequest_ReturnsUnsuccesfulResult()
+        {
+            var stub = new FakeGitHubClient();
+            stub.Success = false;
+            var dataCollector = MakeDataCollector(stub);
+
+            var result = await dataCollector.GetFolderContents(null, new CancellationToken());
+
+            Assert.False(result.Succeeded);
+        }
+
+        [Fact]
         public void GetLargestFiles_Receiving10Files_Returns10LargestFiles()
         {
             var filesystemObjects = new List<FilesystemObject>()
@@ -287,67 +311,88 @@ namespace DevMeter.Tests
         public string HtmlData = string.Empty;
         public string SerializedData = string.Empty;
 
-        public async Task<GitHubApiResponse> GetCommits(string repoHandle, int page, int timeSpan, int perPage)
+        public Task<GitHubApiResponse> GetCommits(string repoHandle, int page, int timeSpan, int perPage)
         {
             if (Success && !string.IsNullOrEmpty(SerializedData))
             {
-                return new GitHubApiResponse(Success, null, SerializedData);
+                return Task.FromResult(new GitHubApiResponse(Success, null, SerializedData));
             }
             else
             {
-                return new GitHubApiResponse(Success, "Not Found", null);
+                return Task.FromResult(new GitHubApiResponse(Success, "Not Found", null));
             }
         }
 
-        public async Task<GitHubApiResponse> GetContributors(string repoHandle, int perPage)
+        public Task<GitHubApiResponse> GetContributors(string repoHandle, int perPage)
         {
             if (Success && !string.IsNullOrEmpty(SerializedData))
             {
-                return new GitHubApiResponse(Success, null, SerializedData);
+                return Task.FromResult(new GitHubApiResponse(Success, null, SerializedData));
             }
             else
             {
-                return new GitHubApiResponse(Success, "Not Found", null);
+                return Task.FromResult(new GitHubApiResponse(Success, "Not Found", null));
             }
         }
 
         public Task<GitHubApiResponse> GetFolderContents(string url)
         {
-            throw new NotImplementedException();
+            if (Success && !string.IsNullOrEmpty(SerializedData))
+            {
+                return Task.FromResult(new GitHubApiResponse(Success, null, SerializedData));
+            }
+            else
+            {
+                return Task.FromResult(new GitHubApiResponse(Success, "Not Found", null));
+            }
         }
 
-        public async Task<GitHubApiResponse> GetLanguages(string repoHandle)
+        public Task<GitHubApiResponse> GetLanguages(string repoHandle)
         {
             if (Success && !string.IsNullOrEmpty(SerializedData))
             {
-                return new GitHubApiResponse(Success, null, SerializedData);
+                return Task.FromResult(new GitHubApiResponse(Success, null, SerializedData));
             }
             else
             {
-                return new GitHubApiResponse(Success, "Not Found", null);
+                return Task.FromResult(new GitHubApiResponse(Success, "Not Found", null));
             }
         }
 
-        public async Task<GitHubHtmlResponse> GetMainPageHtml(string repoHandle)
+        public Task<GitHubHtmlResponse> GetMainPageHtml(string repoHandle)
         {
             if (Success && !string.IsNullOrEmpty(HtmlData))
             {
-                return new GitHubHtmlResponse(Success, null, null, HtmlData);
+                return Task.FromResult(new GitHubHtmlResponse(Success, null, null, HtmlData));
             }
             else
             {
-                return new GitHubHtmlResponse(Success, HttpStatusCode.NotFound, "NotFound", null);
+                return Task.FromResult(new GitHubHtmlResponse(Success, HttpStatusCode.NotFound, "NotFound", null));
             }
         }
 
         public Task<GitHubHtmlResponse> GetPageHtml(string htmlUrl)
         {
-            throw new NotImplementedException();
+            if (Success && !string.IsNullOrEmpty(HtmlData))
+            {
+                return Task.FromResult(new GitHubHtmlResponse(Success, null, null, HtmlData));
+            }
+            else
+            {
+                return Task.FromResult(new GitHubHtmlResponse(Success, HttpStatusCode.NotFound, "NotFound", null));
+            }
         }
 
         public Task<GitHubApiResponse> GetRootFolderContents(string repoHandle)
         {
-            throw new NotImplementedException();
+            if (Success && !string.IsNullOrEmpty(SerializedData))
+            {
+                return Task.FromResult(new GitHubApiResponse(Success, null, SerializedData));
+            }
+            else
+            {
+                return Task.FromResult(new GitHubApiResponse(Success, "Not Found", null));
+            }
         }
     }
 
