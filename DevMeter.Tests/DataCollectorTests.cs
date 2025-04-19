@@ -179,6 +179,106 @@ namespace DevMeter.Tests
             Assert.False(result.Succeeded);
         }
 
+        [Fact]
+        public void GetLargestFiles_Receiving10Files_Returns10LargestFiles()
+        {
+            var filesystemObjects = new List<FilesystemObject>()
+            {
+                new Core.Models.File("file0", 10, 10, "C#"),
+                new Core.Models.File("file1", 20, 20, "C#"),
+                new Core.Models.File("file2", 30, 30, "C#"),
+                new Core.Models.File("file3", 40, 40, "C#"),
+                new Core.Models.File("file4", 50, 50, "C#"),
+                new Core.Models.File("file5", 60, 60, "C#"),
+                new Core.Models.File("file6", 70, 70, "C#"),
+                new Core.Models.File("file7", 80, 80, "C#"),
+                new Core.Models.File("file8", 90, 90, "C#"),
+                new Core.Models.File("file9", 100, 100, "C#"),
+            };
+            var folder = new Folder("root", 550, 550, filesystemObjects);
+            var stub = new FakeGitHubClient();
+            var dataCollector = MakeDataCollector(stub);
+            var pq = new PriorityQueue<Core.Models.File, int>();
+
+            dataCollector.GetLargestFiles(folder, pq);
+
+            int i = 1;
+            while(pq.Count > 0)
+            {
+                Assert.Equal(i * 10, pq.Dequeue().LinesOfCode);
+                i++;
+            }
+        }
+
+        [Fact]
+        public void GetLargestFiles_Receiving11Files_Returns10LargestFiles()
+        {
+            var filesystemObjects = new List<FilesystemObject>()
+            {
+                new Core.Models.File("file0", 10, 10, "C#"),
+                new Core.Models.File("file1", 20, 20, "C#"),
+                new Core.Models.File("file2", 30, 30, "C#"),
+                new Core.Models.File("file3", 40, 40, "C#"),
+                new Core.Models.File("file4", 50, 50, "C#"),
+                new Core.Models.File("file5", 60, 60, "C#"),
+                new Core.Models.File("file6", 70, 70, "C#"),
+                new Core.Models.File("file7", 80, 80, "C#"),
+                new Core.Models.File("file8", 90, 90, "C#"),
+                new Core.Models.File("file9", 100, 100, "C#"),
+                new Core.Models.File("file10", 110, 110, "C#"),
+            };
+            var folder = new Folder("root", 660, 660, filesystemObjects);
+            var stub = new FakeGitHubClient();
+            var dataCollector = MakeDataCollector(stub);
+            var pq = new PriorityQueue<Core.Models.File, int>();
+
+            dataCollector.GetLargestFiles(folder, pq);
+
+            int i = 2;
+            while (pq.Count > 0)
+            {
+                Assert.Equal(i * 10, pq.Dequeue().LinesOfCode);
+                i++;
+            }
+        }
+
+        [Fact]
+        public void GetLargestFiles_ReceivingTree_Returns10LargestFiles()
+        {
+            var nestedFilesystemObjects = new List<FilesystemObject>()
+            {
+                new Core.Models.File("file0", 10, 10, "C#"),
+                new Core.Models.File("file1", 20, 20, "C#"),
+                new Core.Models.File("file2", 30, 30, "C#"),
+                new Core.Models.File("file3", 40, 40, "C#"),
+                new Core.Models.File("file4", 50, 50, "C#"),
+                new Core.Models.File("file5", 60, 60, "C#"),
+                new Core.Models.File("file6", 70, 70, "C#"),
+                new Core.Models.File("file7", 80, 80, "C#"),
+                new Core.Models.File("file8", 90, 90, "C#"),
+                new Core.Models.File("file9", 100, 100, "C#"),
+            };
+
+            var filesystemObjects = new List<FilesystemObject>()
+            {
+                new Folder("folder0", 550, 550, nestedFilesystemObjects),
+            };
+
+            var folder = new Folder("root", 550, 550, filesystemObjects);
+            var stub = new FakeGitHubClient();
+            var dataCollector = MakeDataCollector(stub);
+            var pq = new PriorityQueue<Core.Models.File, int>();
+
+            dataCollector.GetLargestFiles(folder, pq);
+
+            int i = 1;
+            while (pq.Count > 0)
+            {
+                Assert.Equal(i * 10, pq.Dequeue().LinesOfCode);
+                i++;
+            }
+        }
+
     }
 
     public class FakeGitHubClient : IGitHubClient
